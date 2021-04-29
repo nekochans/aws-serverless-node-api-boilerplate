@@ -4,7 +4,7 @@ import hello from '@functions/hello';
 import helloWithPath from '@functions/helloWithPath';
 
 const serverlessConfiguration: AWS = {
-  service: 'aws-serverless-node-api-boilerplate',
+  service: 'serverless-node-api',
   frameworkVersion: '2',
   custom: {
     webpack: {
