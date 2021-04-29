@@ -1,0 +1,51 @@
+{
+  "name": "aws-serverless-node-api-boilerplate",
+  "version": "1.0.0",
+  "description": "AWS上でServerlessなAPIを作成する際のboilerplate",
+  "private": true,
+  "main": "serverless.ts",
+  "scripts": {
+    "deploy": "serverless deploy -v",
+    "remove": "serverless remove -v",
+    "lint:prettier": "prettier 'src/**/*.{js,ts,json}' --check",
+    "fix:prettier": "yarn run lint:prettier --write",
+    "lint:eslint": "eslint 'src/**/*.{js,ts}'",
+    "fix:eslint": "eslint --fix 'src/**/*.{js,ts}'",
+    "lint": "yarn run lint:prettier && yarn run lint:eslint",
+    "format": "yarn run fix:prettier && yarn run fix:eslint",
+    "test": "jest"
+  },
+  "engines": {
+    "node": ">=14.15.0"
+  },
+  "dependencies": {
+    "@middy/core": "^1.5.2",
+    "@middy/http-json-body-parser": "^1.5.2",
+    "ajv": "^8.2.0",
+    "source-map-support": "^0.5.19"
+  },
+  "devDependencies": {
+    "@serverless/typescript": "^2.38.0",
+    "@types/aws-lambda": "^8.10.76",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "jest": "^26.6.3",
+    "json-schema-to-ts": "^1.6.3",
+    "prettier": "^2.2.1",
+    "serverless": "^2.38.0",
+    "serverless-webpack": "^5.4.2",
+    "ts-jest": "^26.5.5",
+    "ts-loader": "^8.2.0",
+    "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.1",
+    "typescript": "^4.2.4",
+    "webpack": "^5.36.1",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "author": "https://github.com/nekochans"
+}
