@@ -1604,6 +1604,15 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
+axios-mock-server@^0.19.1:
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/axios-mock-server/-/axios-mock-server-0.19.1.tgz#5d7a3bbf78bbe07155e5d345f3f1cab76ebb0aa3"
+  integrity sha512-4Rh7eetDYq1KRqisvkflk+7LZ95zykIfBliV95da0rhtqjhq+yj661aOZIXIGyyWOwy3PtgHQ+vRtWWO5p4Osw==
+  dependencies:
+    chokidar "^3.5.1"
+    minimist "^1.2.5"
+    url-search-params-polyfill "^8.1.0"
+
 axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
@@ -3223,6 +3232,11 @@ extend@^3.0.0, extend@~3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
+
+extensible-custom-error@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/extensible-custom-error/-/extensible-custom-error-0.0.7.tgz#4d6cc86c71d60a0e11fa8d24972104720cd30305"
+  integrity sha512-1tgubPkgC+Qi2nUpulI7hGddHh0fA8hXu3P0LBUq2pamZL52KSJZqMu8Q3CiA6kf7Irn/CU1fJe6y4igHCwu4Q==
 
 external-editor@^3.0.3:
   version "3.1.0"
@@ -7639,6 +7653,11 @@ url-parse-lax@^3.0.0:
   integrity sha1-FrXK/Afb42dsGxmZF3gj1lA6yww=
   dependencies:
     prepend-http "^2.0.0"
+
+url-search-params-polyfill@^8.1.0:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/url-search-params-polyfill/-/url-search-params-polyfill-8.1.1.tgz#9e69e4dba300a71ae7ad3cead62c7717fd99329f"
+  integrity sha512-KmkCs6SjE6t4ihrfW9JelAPQIIIFbJweaaSLTh/4AO+c58JlDcb+GbdPt8yr5lRcFg4rPswRFRRhBGpWwh0K/Q==
 
 url-to-options@^1.0.1:
   version "1.0.1"
