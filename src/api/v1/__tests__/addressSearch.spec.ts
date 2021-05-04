@@ -69,6 +69,34 @@ describe('addressSearch', () => {
     expect(actual).toStrictEqual(expected);
   });
 
+  it('should return a NotFoundAddress Error', async () => {
+    const mockResponse = {
+      message: null,
+      results: null,
+      status: 200,
+    };
+
+    axiosMock
+      .onGet('https://zipcloud.ibsnet.co.jp/api/search')
+      .reply(200, mockResponse);
+
+    const request = {
+      postalCode: '1620000',
+    };
+
+    const expected = {
+      statusCode: 404,
+      body: {
+        code: 'NotFoundAddress',
+        message: 'address is not found',
+      },
+    };
+
+    const actual = await addressSearch(request, fetchAddressByPostalCode);
+
+    expect(actual).toStrictEqual(expected);
+  });
+
   it('should return a validation error', async () => {
     const request = {
       postalCode: '12345678',
