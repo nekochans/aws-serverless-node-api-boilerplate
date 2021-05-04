@@ -6,10 +6,10 @@ import { middyfy } from '@libs/lambda';
 
 import defaultRequestHeader from '@constants/defaultRequestHeader';
 import defaultRequestBody from '@constants/defaultRequestBody';
-import defaultQueryParams from "@constants/defaultQueryParams";
+import defaultQueryParams from '@constants/defaultQueryParams';
 
 import pathParams from './pathParams';
-import addressSearch from "../../api/v1/addressSearch";
+import addressSearch from '../../api/v1/addressSearch';
 
 const addressSearchHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultRequestHeader,
