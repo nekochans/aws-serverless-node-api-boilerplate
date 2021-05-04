@@ -106,3 +106,6 @@ dist
 # environment variables file
 .envrc
 .env
+
+# webpack output
+.webpack
