@@ -1,7 +1,38 @@
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+const axiosMock = new MockAdapter(axios);
+
+// axiosMock を作った後にimportする事でMockに置き換えられる
+import { fetchAddressByPostalCode } from '../../repositories/implements/axios/address';
 import addressSearch from '../addressSearch';
 
 describe('addressSearch', () => {
-  it('should return a address', () => {
+  afterEach(() => {
+    axiosMock.restore();
+  });
+
+  it('should return a address', async () => {
+    const mockResponse = {
+      message: null,
+      results: [
+        {
+          address1: '東京都',
+          address2: '新宿区',
+          address3: '市谷加賀町',
+          kana1: 'ﾄｳｷｮｳﾄ',
+          kana2: 'ｼﾝｼﾞｭｸｸ',
+          kana3: 'ｲﾁｶﾞﾔｶｶﾞﾁｮｳ',
+          prefcode: '13',
+          zipcode: '1620062',
+        },
+      ],
+      status: 200,
+    };
+
+    axiosMock
+      .onGet('https://zipcloud.ibsnet.co.jp/api/search')
+      .reply(200, mockResponse);
+
     const request = {
       postalCode: '1620062',
     };
@@ -10,15 +41,17 @@ describe('addressSearch', () => {
       statusCode: 200,
       body: {
         postalCode: '1620062',
-        region: '東京',
-        locality: '市谷加賀町',
+        region: '東京都',
+        locality: '新宿区',
       },
     };
 
-    expect(addressSearch(request)).toStrictEqual(expected);
+    const actual = await addressSearch(request, fetchAddressByPostalCode);
+
+    expect(actual).toStrictEqual(expected);
   });
 
-  it('should return a NotAllowedPostalCode Error', () => {
+  it('should return a NotAllowedPostalCode Error', async () => {
     const request = {
       postalCode: '1000000',
     };
@@ -31,10 +64,12 @@ describe('addressSearch', () => {
       },
     };
 
-    expect(addressSearch(request)).toStrictEqual(expected);
+    const actual = await addressSearch(request, fetchAddressByPostalCode);
+
+    expect(actual).toStrictEqual(expected);
   });
 
-  it('should return a validation error', () => {
+  it('should return a validation error', async () => {
     const request = {
       postalCode: '12345678',
     };
@@ -49,6 +84,8 @@ describe('addressSearch', () => {
       },
     };
 
-    expect(addressSearch(request)).toStrictEqual(expected);
+    const actual = await addressSearch(request, fetchAddressByPostalCode);
+
+    expect(actual).toStrictEqual(expected);
   });
 });
