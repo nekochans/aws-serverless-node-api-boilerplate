@@ -12,6 +12,15 @@ jobs:
     env:
       DEPLOY_STAGE: dev
       AWS_PROFILE: nekochans-dev
+      DB_WRITER_HOSTNAME: ${{ secrets.DB_WRITER_HOSTNAME }}
+      DB_READER_HOSTNAME: ${{ secrets.DB_READER_HOSTNAME }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      SECURITY_GROUP_ID: ${{ secrets.SECURITY_GROUP_ID }}
+      SUBNET_ID_1: ${{ secrets.SUBNET_ID_1 }}
+      SUBNET_ID_2: ${{ secrets.SUBNET_ID_2 }}
+      SUBNET_ID_3: ${{ secrets.SUBNET_ID_3 }}
     timeout-minutes: 10
     strategy:
       matrix:
