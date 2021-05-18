@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mysql:
+    build:
+      context: .
+      dockerfile: docker/mysql/Dockerfile
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "63306:3306"
+    volumes:
+      - nekochans-serverless-api-mysql:/var/lib/mysql
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+volumes:
+  nekochans-serverless-api-mysql:
