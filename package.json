@@ -13,7 +13,10 @@
     "fix:eslint": "eslint --fix 'src/**/*.{js,ts}'",
     "lint": "yarn run lint:prettier && yarn run lint:eslint",
     "format": "yarn run fix:prettier && yarn run fix:eslint",
-    "test": "jest"
+    "test": "jest",
+    "migrate:create": "prisma migrate dev --create-only --preview-feature",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:reset": "prisma migrate reset"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -21,10 +24,12 @@
   "dependencies": {
     "@middy/core": "^1.5.2",
     "@middy/http-json-body-parser": "^1.5.2",
+    "@prisma/client": "^2.22.1",
     "ajv": "^8.2.0",
     "axios": "^0.21.1",
     "extensible-custom-error": "^0.0.7",
     "mysql2": "^2.2.5",
+    "prisma": "^2.22.1",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
