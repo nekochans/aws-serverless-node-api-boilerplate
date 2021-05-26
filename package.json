@@ -14,10 +14,8 @@
     "lint": "yarn run lint:prettier && yarn run lint:eslint",
     "format": "yarn run fix:prettier && yarn run fix:eslint",
     "test": "jest",
-    "migrate:create": "prisma migrate dev --create-only",
-    "migrate:dev": "prisma migrate dev",
-    "migrate:deploy": "prisma migrate deploy",
-    "migrate:reset": "prisma migrate reset"
+    "prisma:introspect": "prisma introspect --force",
+    "prisma:generate": "prisma generate"
   },
   "engines": {
     "node": ">=14.15.0"
