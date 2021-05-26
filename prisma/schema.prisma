@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id                  Int                   @id @default(autoincrement()) @db.UnsignedInt
+  lock_version        Int                   @default(0) @db.UnsignedInt
+  created_at          DateTime              @default(now()) @db.Timestamp(0)
+  updated_at          DateTime              @default(now()) @db.Timestamp(0)
+  users_emails        users_emails?
+  users_phone_numbers users_phone_numbers[]
+}
+
+model users_emails {
+  id           Int      @id @default(autoincrement()) @db.UnsignedInt
+  user_id      Int      @unique @db.UnsignedInt
+  email        String   @unique @db.VarChar(128)
+  lock_version Int      @default(0) @db.UnsignedInt
+  created_at   DateTime @default(now()) @db.Timestamp(0)
+  updated_at   DateTime @default(now()) @db.Timestamp(0)
+  users        users    @relation(fields: [user_id], references: [id])
+}
+
+model users_phone_numbers {
+  id           Int      @id @default(autoincrement()) @db.UnsignedInt
+  user_id      Int      @db.UnsignedInt
+  phone_number String   @db.VarChar(32)
+  lock_version Int      @default(0) @db.UnsignedInt
+  created_at   DateTime @default(now()) @db.Timestamp(0)
+  updated_at   DateTime @default(now()) @db.Timestamp(0)
+  users        users    @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], name: "idx_users_phone_numbers_01")
+  @@index([phone_number], name: "idx_users_phone_numbers_02")
+}

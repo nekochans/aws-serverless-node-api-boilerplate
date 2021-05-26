@@ -1,5 +1,10 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
+
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
 import {
   SuccessResponse,
   ErrorResponse,
@@ -8,15 +13,20 @@ import {
 
 type Request = {
   email: string;
+  phoneNumber?: string;
 };
 
-type createUserSuccessResponse = SuccessResponse<{ user: { id: number } }>;
+type ResponseBody = {
+  user: { id: number };
+};
+
+type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
 
 type ErrorCode = 'EmailAlreadyRegistered';
 
 type ErrorMessage = 'Email address is already registered';
 
-type createUserErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
+type CreateUserErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
 const schema = {
   type: 'object',
@@ -25,6 +35,11 @@ const schema = {
       type: 'string',
       format: 'email',
       maxLength: 254,
+    },
+    phoneNumber: {
+      type: 'string',
+      minLength: 10,
+      maxLength: 11,
     },
   },
   required: ['email'],
@@ -36,39 +51,71 @@ addFormats(ajv);
 
 const validate = ajv.compile(schema);
 
-export const createUser = (
+export const createUser = async (
   request: Request,
-):
-  | createUserSuccessResponse
-  | createUserErrorResponse
-  | ValidationErrorResponse => {
-  const valid = validate(request);
+): Promise<
+  CreateUserSuccessResponse | CreateUserErrorResponse | ValidationErrorResponse
+> => {
+  try {
+    const valid = validate(request);
 
-  if (!valid) {
-    const validationErrors = validate.errors.map((value) => {
+    if (!valid) {
+      const validationErrors = validate.errors.map((value) => {
+        return {
+          key: value.instancePath.replace('/', ''),
+          reason: value.message,
+        };
+      });
+
       return {
-        key: value.instancePath.replace('/', ''),
-        reason: value.message,
+        statusCode: 422,
+        body: {
+          message: 'Unprocessable Entity',
+          validationErrors,
+        },
       };
-    });
+    }
+
+    await prisma.users.create(createDbParams(request));
 
     return {
-      statusCode: 422,
+      statusCode: 201,
       body: {
-        message: 'Unprocessable Entity',
-        validationErrors,
+        user: {
+          id: 1,
+        },
       },
     };
+  } catch (error) {
+    // TODO エラーメッセージが適当なので後で直す
+    return {
+      statusCode: 500,
+      body: {
+        code: 'EmailAlreadyRegistered',
+        message: 'Email address is already registered',
+      },
+    };
+  } finally {
+    await prisma.$disconnect();
   }
+};
 
-  return {
-    statusCode: 201,
-    body: {
-      user: {
-        id: 1,
+const createDbParams = (request: Request) => {
+  const params = {
+    data: {
+      users_emails: {
+        create: { email: request.email },
       },
     },
   };
+
+  if (request.phoneNumber !== undefined) {
+    params.data['users_phone_numbers'] = {
+      create: [{ phone_number: request.phoneNumber }],
+    };
+  }
+
+  return params;
 };
 
 export default createUser;
