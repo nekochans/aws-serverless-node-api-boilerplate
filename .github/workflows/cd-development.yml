@@ -17,6 +17,7 @@ jobs:
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_NAME: ${{ secrets.DB_NAME }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       SECURITY_GROUP_ID: ${{ secrets.SECURITY_GROUP_ID }}
       SUBNET_ID_1: ${{ secrets.SUBNET_ID_1 }}
       SUBNET_ID_2: ${{ secrets.SUBNET_ID_2 }}
@@ -60,4 +61,5 @@ jobs:
             ${{ runner.os }}-yarn-
       - run: |
           yarn install
+          yarn run prisma:generate
           yarn run deploy
