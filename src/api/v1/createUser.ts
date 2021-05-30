@@ -3,8 +3,6 @@ import addFormats from 'ajv-formats';
 
 import { PrismaClient, users } from '@prisma/client';
 
-const prisma = new PrismaClient();
-
 import {
   SuccessResponse,
   ErrorResponse,
@@ -55,6 +53,7 @@ const validate = ajv.compile(schema);
 
 export const createUser = async (
   request: Request,
+  prisma: PrismaClient,
 ): Promise<
   CreateUserSuccessResponse | CreateUserErrorResponse | ValidationErrorResponse
 > => {

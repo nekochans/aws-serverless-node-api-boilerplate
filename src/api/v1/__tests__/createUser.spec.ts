@@ -1,9 +1,11 @@
 import createUser from '../createUser';
 import { PrismaClient } from '@prisma/client';
 
-describe('createUser', () => {
+describe.skip('createUser', () => {
+  let prisma: PrismaClient;
+
   beforeEach(async () => {
-    const prisma = new PrismaClient();
+    prisma = new PrismaClient();
 
     try {
       await prisma.$queryRaw('SET FOREIGN_KEY_CHECKS=0');
@@ -19,7 +21,7 @@ describe('createUser', () => {
     }
   });
 
-  it.skip('will create a new user, Only the required parameters are specified', async () => {
+  it('will create a new user, Only the required parameters are specified', async () => {
     const request = {
       email: 'aaa@exmple.com',
     };
@@ -37,12 +39,12 @@ describe('createUser', () => {
       },
     };
 
-    const actual = await createUser(request);
+    const actual = await createUser(request, prisma);
 
     expect(actual).toStrictEqual(expected);
   });
 
-  it.skip('will create a new user, specifying all parameters', async () => {
+  it('will create a new user, specifying all parameters', async () => {
     const request = {
       email: 'bbb@exmple.com',
       phoneNumber: '08012345678',
@@ -62,12 +64,12 @@ describe('createUser', () => {
       },
     };
 
-    const actual = await createUser(request);
+    const actual = await createUser(request, prisma);
 
     expect(actual).toStrictEqual(expected);
   });
 
-  it.skip('should return a email already registered error', async () => {
+  it('should return a email already registered error', async () => {
     const request = {
       email: 'ccc@exmple.com',
     };
@@ -80,14 +82,14 @@ describe('createUser', () => {
       },
     };
 
-    await createUser(request);
+    await createUser(request, prisma);
 
-    const actual = await createUser(request);
+    const actual = await createUser(request, prisma);
 
     expect(actual).toStrictEqual(expected);
   });
 
-  it.skip('should return a validation error', async () => {
+  it('should return a validation error', async () => {
     const request = {
       email: '12345678',
     };
@@ -102,7 +104,7 @@ describe('createUser', () => {
       },
     };
 
-    const actual = await createUser(request);
+    const actual = await createUser(request, prisma);
 
     expect(actual).toStrictEqual(expected);
   });
