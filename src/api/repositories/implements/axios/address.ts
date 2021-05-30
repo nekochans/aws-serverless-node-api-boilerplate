@@ -35,10 +35,11 @@ export const fetchAddressByPostalCode: FetchAddressByPostalCode = async (
       zipcode: postalCode,
     };
 
-    const apiResponse = await httpClient.get<ExternalAddressSearchApiSuccessResponse>(
-      'https://zipcloud.ibsnet.co.jp/api/search',
-      { params },
-    );
+    const apiResponse =
+      await httpClient.get<ExternalAddressSearchApiSuccessResponse>(
+        'https://zipcloud.ibsnet.co.jp/api/search',
+        { params },
+      );
 
     if (apiResponse.data.message !== null || !apiResponse.data.results) {
       return Promise.reject(

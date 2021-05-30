@@ -7,4 +7,5 @@ export const FetchAddressByPostalCodeErrorMessage = {
   unexpectedError: 'UnexpectedError',
 } as const;
 
-export type FetchAddressByPostalCodeErrorMessage = typeof FetchAddressByPostalCodeErrorMessage[keyof typeof FetchAddressByPostalCodeErrorMessage];
+export type FetchAddressByPostalCodeErrorMessage =
+  typeof FetchAddressByPostalCodeErrorMessage[keyof typeof FetchAddressByPostalCodeErrorMessage];

@@ -13,7 +13,9 @@
     "fix:eslint": "eslint --fix 'src/**/*.{js,ts}'",
     "lint": "yarn run lint:prettier && yarn run lint:eslint",
     "format": "yarn run fix:prettier && yarn run fix:eslint",
-    "test": "jest"
+    "test": "jest",
+    "prisma:introspect": "prisma introspect --force",
+    "prisma:generate": "prisma generate"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -21,10 +23,11 @@
   "dependencies": {
     "@middy/core": "^1.5.2",
     "@middy/http-json-body-parser": "^1.5.2",
-    "ajv": "^8.2.0",
+    "@prisma/client": "^2.23.0",
+    "ajv": "^8.5.0",
+    "ajv-formats": "^2.1.0",
     "axios": "^0.21.1",
     "extensible-custom-error": "^0.0.7",
-    "mysql2": "^2.2.5",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
@@ -40,6 +43,7 @@
     "jest": "^26.6.3",
     "json-schema-to-ts": "^1.6.3",
     "prettier": "^2.2.1",
+    "prisma": "^2.23.0",
     "serverless": "^2.38.0",
     "serverless-webpack": "^5.4.2",
     "ts-jest": "^26.5.5",
