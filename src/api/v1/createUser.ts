@@ -94,7 +94,7 @@ export const createUser = async (
       };
     }
 
-    const newUser = await prisma.users.create(createDbParams(request));
+    const newUser = await prisma.users.create(createUserParams(request));
 
     const userEntity = await createUserEntity(prisma, newUser);
 
@@ -132,7 +132,7 @@ export const createUser = async (
   }
 };
 
-const createDbParams = (request: Request) => {
+const createUserParams = (request: Request) => {
   const params = {
     data: {
       users_emails: {
