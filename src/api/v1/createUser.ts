@@ -1,7 +1,7 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, users } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -96,31 +96,7 @@ export const createUser = async (
 
     const newUser = await prisma.users.create(createDbParams(request));
 
-    const responseData = await prisma.users.findUnique({
-      where: {
-        id: newUser.id,
-      },
-      include: {
-        users_emails: true,
-        users_phone_numbers: true,
-      },
-    });
-
-    const userEntity = {
-      userId: responseData.id,
-      email: {
-        id: responseData.users_emails.id,
-        email: responseData.users_emails.email,
-      },
-    };
-
-    if (request.phoneNumber !== undefined) {
-      userEntity['phoneNumbers'] = responseData.users_phone_numbers.map(
-        (value) => {
-          return { id: value.id, phoneNumber: value.phone_number };
-        },
-      );
-    }
+    const userEntity = await createUserEntity(prisma, newUser);
 
     return {
       statusCode: 201,
@@ -172,6 +148,36 @@ const createDbParams = (request: Request) => {
   }
 
   return params;
+};
+
+const createUserEntity = async (prisma: PrismaClient, newUser: users) => {
+  const responseData = await prisma.users.findUnique({
+    where: {
+      id: newUser.id,
+    },
+    include: {
+      users_emails: true,
+      users_phone_numbers: true,
+    },
+  });
+
+  const userEntity = {
+    userId: responseData.id,
+    email: {
+      id: responseData.users_emails.id,
+      email: responseData.users_emails.email,
+    },
+  };
+
+  if (responseData.users_phone_numbers.length !== 0) {
+    userEntity['phoneNumbers'] = responseData.users_phone_numbers.map(
+      (value) => {
+        return { id: value.id, phoneNumber: value.phone_number };
+      },
+    );
+  }
+
+  return userEntity;
 };
 
 export default createUser;
