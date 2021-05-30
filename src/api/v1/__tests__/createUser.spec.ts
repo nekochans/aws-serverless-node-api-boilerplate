@@ -28,7 +28,11 @@ describe('createUser', () => {
       statusCode: 201,
       body: {
         user: {
-          id: 1,
+          userId: 1,
+          email: {
+            id: 1,
+            email: request.email,
+          },
         },
       },
     };
@@ -48,7 +52,12 @@ describe('createUser', () => {
       statusCode: 201,
       body: {
         user: {
-          id: 1,
+          userId: 1,
+          email: {
+            id: 1,
+            email: request.email,
+          },
+          phoneNumbers: [{ id: 1, phoneNumber: request.phoneNumber }],
         },
       },
     };

@@ -11,13 +11,15 @@ import {
   ValidationErrorResponse,
 } from '../Response';
 
+import { UserEntity } from '../domain/types/userEntity';
+
 type Request = {
   email: string;
   phoneNumber?: string;
 };
 
 type ResponseBody = {
-  user: { id: number };
+  user: UserEntity;
 };
 
 type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
@@ -92,14 +94,38 @@ export const createUser = async (
       };
     }
 
-    await prisma.users.create(createDbParams(request));
+    const newUser = await prisma.users.create(createDbParams(request));
+
+    const responseData = await prisma.users.findUnique({
+      where: {
+        id: newUser.id,
+      },
+      include: {
+        users_emails: true,
+        users_phone_numbers: true,
+      },
+    });
+
+    const userEntity = {
+      userId: responseData.id,
+      email: {
+        id: responseData.users_emails.id,
+        email: responseData.users_emails.email,
+      },
+    };
+
+    if (request.phoneNumber !== undefined) {
+      userEntity['phoneNumbers'] = responseData.users_phone_numbers.map(
+        (value) => {
+          return { id: value.id, phoneNumber: value.phone_number };
+        },
+      );
+    }
 
     return {
       statusCode: 201,
       body: {
-        user: {
-          id: 1,
-        },
+        user: userEntity,
       },
     };
   } catch (error) {
