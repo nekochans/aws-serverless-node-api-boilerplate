@@ -76,6 +76,22 @@ export const createUser = async (
       };
     }
 
+    const user = await prisma.users_emails.findFirst({
+      where: {
+        email: request.email,
+      },
+    });
+
+    if (user) {
+      return {
+        statusCode: 400,
+        body: {
+          code: 'EmailAlreadyRegistered',
+          message: 'Email address is already registered',
+        },
+      };
+    }
+
     await prisma.users.create(createDbParams(request));
 
     return {
@@ -87,7 +103,21 @@ export const createUser = async (
       },
     };
   } catch (error) {
-    // TODO エラーメッセージが適当なので後で直す
+    // Prismaのエラーオブジェクトは下記のような仕様、これを元に判定する事は出来る
+    // https://www.prisma.io/docs/reference/api-reference/error-reference
+    if (
+      error?.code === 'P2002' &&
+      error?.meta?.target === 'uq_users_emails_02'
+    ) {
+      return {
+        statusCode: 400,
+        body: {
+          code: 'EmailAlreadyRegistered',
+          message: 'Email address is already registered',
+        },
+      };
+    }
+
     return {
       statusCode: 500,
       body: {

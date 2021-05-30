@@ -58,6 +58,26 @@ describe('createUser', () => {
     expect(actual).toStrictEqual(expected);
   });
 
+  it.skip('should return a email already registered error', async () => {
+    const request = {
+      email: 'ccc@exmple.com',
+    };
+
+    const expected = {
+      statusCode: 400,
+      body: {
+        code: 'EmailAlreadyRegistered',
+        message: `Email address is already registered`,
+      },
+    };
+
+    await createUser(request);
+
+    const actual = await createUser(request);
+
+    expect(actual).toStrictEqual(expected);
+  });
+
   it.skip('should return a validation error', async () => {
     const request = {
       email: '12345678',
