@@ -11,6 +11,7 @@ import {
 } from '../repositories/errors/FetchAddressByPostalCodeError';
 import assertNever from '../utils/assertNever';
 import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { valueOf } from '../utils/valueOf';
 
 type Request = {
   postalCode: string;
@@ -24,12 +25,14 @@ type ResponseBody = {
 
 type AddressSearchSuccessResponse = SuccessResponse<ResponseBody>;
 
-type ErrorCode = 'NotFoundAddress' | 'NotAllowedPostalCode' | 'UnexpectedError';
+type errors = {
+  NotFoundAddress: 'address is not found';
+  NotAllowedPostalCode: 'not allowed to search by that postalCode';
+  UnexpectedError: 'unexpected error';
+};
 
-type ErrorMessage =
-  | 'address is not found'
-  | 'not allowed to search by that postalCode'
-  | 'unexpected error';
+type ErrorCode = keyof errors;
+type ErrorMessage = valueOf<errors>;
 
 type AddressSearchErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
