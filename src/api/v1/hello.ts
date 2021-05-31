@@ -4,7 +4,7 @@ import {
   ErrorResponse,
   ValidationErrorResponse,
 } from '../Response';
-import { HttpStatusCode } from './../../constants/HttpStatusCode';
+import { HttpStatusCode } from '@constants/HttpStatusCode';
 
 type Request = {
   name: string;

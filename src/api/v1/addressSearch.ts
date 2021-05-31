@@ -10,7 +10,7 @@ import {
   FetchAddressByPostalCodeErrorMessage,
 } from '../repositories/errors/FetchAddressByPostalCodeError';
 import assertNever from '../utils/assertNever';
-import { HttpStatusCode } from '../../constants/HttpStatusCode';
+import { HttpStatusCode } from '@constants/HttpStatusCode';
 
 type Request = {
   postalCode: string;

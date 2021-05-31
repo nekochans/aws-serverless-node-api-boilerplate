@@ -10,7 +10,7 @@ import {
 } from '../Response';
 
 import { UserEntity } from '../domain/types/userEntity';
-import { HttpStatusCode } from '../../constants/HttpStatusCode';
+import { HttpStatusCode } from '@constants/HttpStatusCode';
 
 type Request = {
   email: string;
