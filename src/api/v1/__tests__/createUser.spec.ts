@@ -30,7 +30,7 @@ describe.skip('createUser', () => {
       statusCode: 201,
       body: {
         user: {
-          userId: 1,
+          id: 1,
           email: {
             id: 1,
             email: request.email,
@@ -54,7 +54,7 @@ describe.skip('createUser', () => {
       statusCode: 201,
       body: {
         user: {
-          userId: 1,
+          id: 1,
           email: {
             id: 1,
             email: request.email,
