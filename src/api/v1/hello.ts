@@ -4,6 +4,7 @@ import {
   ErrorResponse,
   ValidationErrorResponse,
 } from '../Response';
+import { HttpStatusCode } from './../../constants/HttpStatusCode';
 
 type Request = {
   name: string;
@@ -57,7 +58,7 @@ export const hello = (
     });
 
     return {
-      statusCode: 422,
+      statusCode: HttpStatusCode.unprocessableEntity,
       body: {
         message: 'Unprocessable Entity',
         validationErrors,
@@ -67,7 +68,7 @@ export const hello = (
 
   if (request.name === 'Error') {
     return {
-      statusCode: 400,
+      statusCode: HttpStatusCode.badRequest,
       body: {
         code: 'NotAllowedMessage',
         message: 'NotAllowedMessage',
@@ -76,7 +77,7 @@ export const hello = (
   }
 
   return {
-    statusCode: 200,
+    statusCode: HttpStatusCode.ok,
     body: {
       message: `Hello ${request.name}, welcome to the exciting Serverless world! Your Status is ${request.status}!`,
     },

@@ -10,6 +10,7 @@ import {
   FetchAddressByPostalCodeErrorMessage,
 } from '../repositories/errors/FetchAddressByPostalCodeError';
 import assertNever from '../utils/assertNever';
+import { HttpStatusCode } from '../../constants/HttpStatusCode';
 
 type Request = {
   postalCode: string;
@@ -69,7 +70,7 @@ export const addressSearch = async (
       });
 
       return {
-        statusCode: 422,
+        statusCode: HttpStatusCode.unprocessableEntity,
         body: {
           message: 'Unprocessable Entity',
           validationErrors,
@@ -79,7 +80,7 @@ export const addressSearch = async (
 
     if (request.postalCode === '1000000') {
       return {
-        statusCode: 400,
+        statusCode: HttpStatusCode.badRequest,
         body: {
           code: 'NotAllowedPostalCode',
           message: 'not allowed to search by that postalCode',
@@ -90,7 +91,7 @@ export const addressSearch = async (
     const address = await fetchAddressByPostalCode(request.postalCode);
 
     return {
-      statusCode: 200,
+      statusCode: HttpStatusCode.ok,
       body: address,
     };
   } catch (error) {
@@ -106,7 +107,7 @@ const createErrorResponse = (
   switch (errorMessage) {
     case 'AddressDoseNotFoundError':
       return {
-        statusCode: 404,
+        statusCode: HttpStatusCode.notFound,
         body: {
           code: 'NotFoundAddress',
           message: 'address is not found',
@@ -114,7 +115,7 @@ const createErrorResponse = (
       };
     case 'UnexpectedError':
       return {
-        statusCode: 500,
+        statusCode: HttpStatusCode.internalServerError,
         body: {
           code: 'UnexpectedError',
           message: 'unexpected error',

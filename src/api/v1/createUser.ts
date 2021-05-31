@@ -10,6 +10,7 @@ import {
 } from '../Response';
 
 import { UserEntity } from '../domain/types/userEntity';
+import { HttpStatusCode } from '../../constants/HttpStatusCode';
 
 type Request = {
   email: string;
@@ -69,7 +70,7 @@ export const createUser = async (
       });
 
       return {
-        statusCode: 422,
+        statusCode: HttpStatusCode.unprocessableEntity,
         body: {
           message: 'Unprocessable Entity',
           validationErrors,
@@ -85,7 +86,7 @@ export const createUser = async (
 
     if (user) {
       return {
-        statusCode: 400,
+        statusCode: HttpStatusCode.badRequest,
         body: {
           code: 'EmailAlreadyRegistered',
           message: 'Email address is already registered',
@@ -98,7 +99,7 @@ export const createUser = async (
     const userEntity = await createUserEntity(prisma, newUser);
 
     return {
-      statusCode: 201,
+      statusCode: HttpStatusCode.created,
       body: {
         user: userEntity,
       },
@@ -111,7 +112,7 @@ export const createUser = async (
       error?.meta?.target === 'uq_users_emails_02'
     ) {
       return {
-        statusCode: 400,
+        statusCode: HttpStatusCode.badRequest,
         body: {
           code: 'EmailAlreadyRegistered',
           message: 'Email address is already registered',
@@ -120,7 +121,7 @@ export const createUser = async (
     }
 
     return {
-      statusCode: 500,
+      statusCode: HttpStatusCode.internalServerError,
       body: {
         code: 'EmailAlreadyRegistered',
         message: 'Email address is already registered',

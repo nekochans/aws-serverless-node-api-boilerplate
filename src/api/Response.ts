@@ -14,7 +14,7 @@ export type ErrorResponse<T, U> = {
 };
 
 export type ValidationErrorResponse = {
-  statusCode: 422;
+  statusCode: typeof HttpStatusCode.unprocessableEntity;
   body: {
     message: 'Unprocessable Entity';
     validationErrors: { key: string; reason: string }[];
