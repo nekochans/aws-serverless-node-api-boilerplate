@@ -1,6 +1,6 @@
-import sayHello from '../sayHello';
+import hello from '../hello';
 
-describe('sayHello', () => {
+describe('hello', () => {
   it('should return a success message', () => {
     const request = {
       name: 'Moko',
@@ -14,7 +14,7 @@ describe('sayHello', () => {
       },
     };
 
-    expect(sayHello(request)).toStrictEqual(expected);
+    expect(hello(request)).toStrictEqual(expected);
   });
 
   it('should return a Error', () => {
@@ -31,7 +31,7 @@ describe('sayHello', () => {
       },
     };
 
-    expect(sayHello(request)).toStrictEqual(expected);
+    expect(hello(request)).toStrictEqual(expected);
   });
 
   it('should return a validation error', () => {
@@ -51,6 +51,6 @@ describe('sayHello', () => {
       },
     };
 
-    expect(sayHello(request)).toStrictEqual(expected);
+    expect(hello(request)).toStrictEqual(expected);
   });
 });

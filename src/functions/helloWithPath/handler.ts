@@ -10,7 +10,7 @@ import defaultRequestBody from '@constants/defaultRequestBody';
 import pathParams from './pathParams';
 import queryParams from './queryParams';
 
-const helloWithPath: ValidatedEventAPIGatewayProxyEvent<
+const helloWithPathHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultRequestHeader,
   typeof defaultRequestBody,
   typeof pathParams,
@@ -24,4 +24,4 @@ const helloWithPath: ValidatedEventAPIGatewayProxyEvent<
   return formatJsonResponse(200, responseBody);
 };
 
-export const main = middyfy(helloWithPath);
+export const main = middyfy(helloWithPathHandler);

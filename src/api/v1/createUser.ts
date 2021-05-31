@@ -161,7 +161,7 @@ const createUserEntity = async (prisma: PrismaClient, newUser: users) => {
   });
 
   const userEntity = {
-    userId: responseData.id,
+    id: responseData.id,
     email: {
       id: responseData.users_emails.id,
       email: responseData.users_emails.email,

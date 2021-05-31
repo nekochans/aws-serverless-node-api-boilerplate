@@ -1,5 +1,5 @@
 export type UserEntity = {
-  userId: number;
+  id: number;
   email: emailEntity;
   phoneNumbers?: phoneNumberEntity[];
 };

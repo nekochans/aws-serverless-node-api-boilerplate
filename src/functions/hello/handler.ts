@@ -8,17 +8,17 @@ import defaultQueryParams from '@constants/defaultQueryParams';
 
 import requestHeader from './requestHeader';
 import requestBody from './requestBody';
-import sayHello from '../../api/v1/sayHello';
+import hello from '../../api/v1/hello';
 
-const hello: ValidatedEventAPIGatewayProxyEvent<
+const helloHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof requestHeader,
   typeof requestBody,
   typeof defaultPathParams,
   typeof defaultQueryParams
 > = async (event) => {
-  const apiRes = sayHello(event.body);
+  const apiRes = hello(event.body);
 
   return formatJsonResponse(apiRes.statusCode, apiRes.body);
 };
 
-export const main = middyfy(hello);
+export const main = middyfy(helloHandler);

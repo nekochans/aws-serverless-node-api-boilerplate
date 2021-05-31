@@ -40,7 +40,7 @@ const ajv = new Ajv({ allErrors: true });
 
 const validate = ajv.compile(schema);
 
-export const sayHello = (
+export const hello = (
   request: Request,
 ):
   | SayHelloSuccessResponse
@@ -83,4 +83,4 @@ export const sayHello = (
   };
 };
 
-export default sayHello;
+export default hello;
