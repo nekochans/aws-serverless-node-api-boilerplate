@@ -26,9 +26,9 @@ type ResponseBody = {
 export type AddressSearchSuccessResponse = SuccessResponse<ResponseBody>;
 
 type Errors = {
-  NotFoundAddress: 'address is not found';
-  NotAllowedPostalCode: 'not allowed to search by that postalCode';
-  UnexpectedError: 'unexpected error';
+  notFoundAddress: 'address is not found';
+  notAllowedPostalCode: 'not allowed to search by that postalCode';
+  unexpectedError: 'unexpected error';
 };
 
 type ErrorCode = keyof Errors;
@@ -85,7 +85,7 @@ export const addressSearch = async (
       return {
         statusCode: HttpStatusCode.badRequest,
         body: {
-          code: 'NotAllowedPostalCode',
+          code: 'notAllowedPostalCode',
           message: 'not allowed to search by that postalCode',
         },
       };
@@ -112,7 +112,7 @@ const createErrorResponse = (
       return {
         statusCode: HttpStatusCode.notFound,
         body: {
-          code: 'NotFoundAddress',
+          code: 'notFoundAddress',
           message: 'address is not found',
         },
       };
@@ -120,7 +120,7 @@ const createErrorResponse = (
       return {
         statusCode: HttpStatusCode.internalServerError,
         body: {
-          code: 'UnexpectedError',
+          code: 'unexpectedError',
           message: 'unexpected error',
         },
       };

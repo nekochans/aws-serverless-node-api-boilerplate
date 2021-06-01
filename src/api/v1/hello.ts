@@ -15,7 +15,7 @@ type Request = {
 export type SayHelloSuccessResponse = SuccessResponse<{ message: string }>;
 
 export type Errors = {
-  NotAllowedMessage: 'NotAllowedMessage';
+  notAllowedMessage: 'message is not allowed';
 };
 
 type ErrorCode = keyof Errors;
@@ -74,8 +74,8 @@ export const hello = (
     return {
       statusCode: HttpStatusCode.badRequest,
       body: {
-        code: 'NotAllowedMessage',
-        message: 'NotAllowedMessage',
+        code: 'notAllowedMessage',
+        message: 'message is not allowed',
       },
     };
   }

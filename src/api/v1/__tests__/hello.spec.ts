@@ -29,8 +29,8 @@ describe('hello', () => {
     const expected: SayHelloErrorResponse = {
       statusCode: 400,
       body: {
-        code: 'NotAllowedMessage',
-        message: 'NotAllowedMessage',
+        code: 'notAllowedMessage',
+        message: 'message is not allowed',
       },
     };
 

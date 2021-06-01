@@ -81,8 +81,8 @@ describe.skip('createUser', () => {
     const expected: CreateUserErrorResponse = {
       statusCode: 400,
       body: {
-        code: 'EmailAlreadyRegistered',
-        message: `Email address is already registered`,
+        code: 'emailAlreadyRegistered',
+        message: `email is already registered`,
       },
     };
 

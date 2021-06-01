@@ -63,7 +63,7 @@ describe('addressSearch', () => {
     const expected: AddressSearchErrorResponse = {
       statusCode: 400,
       body: {
-        code: 'NotAllowedPostalCode',
+        code: 'notAllowedPostalCode',
         message: 'not allowed to search by that postalCode',
       },
     };
@@ -91,7 +91,7 @@ describe('addressSearch', () => {
     const expected: AddressSearchErrorResponse = {
       statusCode: 404,
       body: {
-        code: 'NotFoundAddress',
+        code: 'notFoundAddress',
         message: 'address is not found',
       },
     };

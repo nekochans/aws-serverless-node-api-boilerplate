@@ -25,7 +25,7 @@ type ResponseBody = {
 export type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
 
 type Errors = {
-  EmailAlreadyRegistered: 'Email address is already registered';
+  emailAlreadyRegistered: 'email is already registered';
 };
 
 type ErrorCode = keyof Errors;
@@ -92,8 +92,8 @@ export const createUser = async (
       return {
         statusCode: HttpStatusCode.badRequest,
         body: {
-          code: 'EmailAlreadyRegistered',
-          message: 'Email address is already registered',
+          code: 'emailAlreadyRegistered',
+          message: 'email is already registered',
         },
       };
     }
@@ -118,8 +118,8 @@ export const createUser = async (
       return {
         statusCode: HttpStatusCode.badRequest,
         body: {
-          code: 'EmailAlreadyRegistered',
-          message: 'Email address is already registered',
+          code: 'emailAlreadyRegistered',
+          message: 'email is already registered',
         },
       };
     }
@@ -127,8 +127,8 @@ export const createUser = async (
     return {
       statusCode: HttpStatusCode.internalServerError,
       body: {
-        code: 'EmailAlreadyRegistered',
-        message: 'Email address is already registered',
+        code: 'emailAlreadyRegistered',
+        message: 'email is already registered',
       },
     };
   } finally {
