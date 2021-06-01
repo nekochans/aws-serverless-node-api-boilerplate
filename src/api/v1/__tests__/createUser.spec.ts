@@ -3,7 +3,10 @@ import createUser, {
   CreateUserSuccessResponse,
 } from '../createUser';
 import { PrismaClient } from '@prisma/client';
-import { ValidationErrorResponse } from '../../Response';
+import {
+  ValidationErrorResponse,
+  validationErrorResponseMessage,
+} from '../../Response';
 import { HttpStatusCode } from '@constants/HttpStatusCode';
 
 describe.skip('createUser', () => {
@@ -102,7 +105,7 @@ describe.skip('createUser', () => {
     const expected: ValidationErrorResponse = {
       statusCode: HttpStatusCode.unprocessableEntity,
       body: {
-        message: `Unprocessable Entity`,
+        message: validationErrorResponseMessage(),
         validationErrors: [
           { key: 'email', reason: 'must match format "email"' },
         ],

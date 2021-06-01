@@ -1,4 +1,3 @@
-import Ajv from 'ajv';
 import {
   SuccessResponse,
   ErrorResponse,
@@ -12,6 +11,7 @@ import {
 import assertNever from '../utils/assertNever';
 import { HttpStatusCode } from '@constants/HttpStatusCode';
 import { valueOf } from '../utils/valueOf';
+import validate from '../validate';
 
 type Request = {
   postalCode: string;
@@ -49,10 +49,6 @@ const schema = {
   additionalProperties: false,
 };
 
-const ajv = new Ajv({ allErrors: true });
-
-const validate = ajv.compile(schema);
-
 export const addressSearch = async (
   request: Request,
   fetchAddressByPostalCode: FetchAddressByPostalCode,
@@ -62,23 +58,12 @@ export const addressSearch = async (
   | ValidationErrorResponse
 > => {
   try {
-    const valid = validate(request);
-
-    if (!valid) {
-      const validationErrors = validate.errors.map((value) => {
-        return {
-          key: value.instancePath.replace('/', ''),
-          reason: value.message,
-        };
-      });
-
-      return {
-        statusCode: HttpStatusCode.unprocessableEntity,
-        body: {
-          message: 'Unprocessable Entity',
-          validationErrors,
-        },
-      };
+    const validateResult = validate<Request>(schema, request);
+    if (
+      validateResult.isError === true &&
+      validateResult.validationErrorResponse
+    ) {
+      return validateResult.validationErrorResponse;
     }
 
     if (request.postalCode === '1000000') {
