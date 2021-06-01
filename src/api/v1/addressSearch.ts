@@ -23,7 +23,7 @@ type ResponseBody = {
   locality: string;
 };
 
-type AddressSearchSuccessResponse = SuccessResponse<ResponseBody>;
+export type AddressSearchSuccessResponse = SuccessResponse<ResponseBody>;
 
 type Errors = {
   NotFoundAddress: 'address is not found';
@@ -34,7 +34,7 @@ type Errors = {
 type ErrorCode = keyof Errors;
 type ErrorMessage = valueOf<Errors>;
 
-type AddressSearchErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
+export type AddressSearchErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
 const schema = {
   type: 'object',

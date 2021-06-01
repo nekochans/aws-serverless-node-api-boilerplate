@@ -4,7 +4,11 @@ const axiosMock = new MockAdapter(axios);
 
 // axiosMock を作った後にimportする事でMockに置き換えられる
 import { fetchAddressByPostalCode } from '../../repositories/implements/axios/address';
-import addressSearch from '../addressSearch';
+import addressSearch, {
+  AddressSearchErrorResponse,
+  AddressSearchSuccessResponse,
+} from '../addressSearch';
+import { ValidationErrorResponse } from '../../Response';
 
 describe('addressSearch', () => {
   afterEach(() => {
@@ -37,7 +41,7 @@ describe('addressSearch', () => {
       postalCode: '1620062',
     };
 
-    const expected = {
+    const expected: AddressSearchSuccessResponse = {
       statusCode: 200,
       body: {
         postalCode: '1620062',
@@ -56,7 +60,7 @@ describe('addressSearch', () => {
       postalCode: '1000000',
     };
 
-    const expected = {
+    const expected: AddressSearchErrorResponse = {
       statusCode: 400,
       body: {
         code: 'NotAllowedPostalCode',
@@ -84,7 +88,7 @@ describe('addressSearch', () => {
       postalCode: '1620000',
     };
 
-    const expected = {
+    const expected: AddressSearchErrorResponse = {
       statusCode: 404,
       body: {
         code: 'NotFoundAddress',
@@ -102,7 +106,7 @@ describe('addressSearch', () => {
       postalCode: '12345678',
     };
 
-    const expected = {
+    const expected: ValidationErrorResponse = {
       statusCode: 422,
       body: {
         message: `Unprocessable Entity`,

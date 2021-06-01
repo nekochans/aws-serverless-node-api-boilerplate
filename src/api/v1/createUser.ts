@@ -22,7 +22,7 @@ type ResponseBody = {
   user: UserEntity;
 };
 
-type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
+export type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
 
 type Errors = {
   EmailAlreadyRegistered: 'Email address is already registered';
@@ -31,7 +31,7 @@ type Errors = {
 type ErrorCode = keyof Errors;
 type ErrorMessage = valueOf<Errors>;
 
-type CreateUserErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
+export type CreateUserErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
 const schema = {
   type: 'object',

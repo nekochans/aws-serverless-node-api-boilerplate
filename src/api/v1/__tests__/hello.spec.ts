@@ -1,4 +1,7 @@
-import hello from '../hello';
+import hello, {
+  SayHelloErrorResponse,
+  SayHelloSuccessResponse,
+} from '../hello';
 
 describe('hello', () => {
   it('should return a success message', () => {
@@ -7,7 +10,7 @@ describe('hello', () => {
       status: 1,
     };
 
-    const expected = {
+    const expected: SayHelloSuccessResponse = {
       statusCode: 200,
       body: {
         message: `Hello ${request.name}, welcome to the exciting Serverless world! Your Status is ${request.status}!`,
@@ -23,7 +26,7 @@ describe('hello', () => {
       status: 1,
     };
 
-    const expected = {
+    const expected: SayHelloErrorResponse = {
       statusCode: 400,
       body: {
         code: 'NotAllowedMessage',

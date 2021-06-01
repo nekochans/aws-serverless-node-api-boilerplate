@@ -12,7 +12,7 @@ type Request = {
   status: number;
 };
 
-type SayHelloSuccessResponse = SuccessResponse<{ message: string }>;
+export type SayHelloSuccessResponse = SuccessResponse<{ message: string }>;
 
 export type Errors = {
   NotAllowedMessage: 'NotAllowedMessage';
@@ -21,7 +21,7 @@ export type Errors = {
 type ErrorCode = keyof Errors;
 type ErrorMessage = valueOf<Errors>;
 
-type SayHelloErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
+export type SayHelloErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
 const schema = {
   type: 'object',
