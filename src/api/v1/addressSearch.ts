@@ -2,6 +2,7 @@ import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
+  createSuccessResponse,
 } from '../response';
 import { FetchAddressByPostalCode } from '../repositories/interfaces/address';
 import {
@@ -78,10 +79,7 @@ export const addressSearch = async (
 
     const address = await fetchAddressByPostalCode(request.postalCode);
 
-    return {
-      statusCode: HttpStatusCode.ok,
-      body: address,
-    };
+    return createSuccessResponse<ResponseBody>(HttpStatusCode.ok, address);
   } catch (error) {
     return createErrorResponse(error);
   }

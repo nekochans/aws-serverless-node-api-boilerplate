@@ -5,6 +5,16 @@ export type SuccessResponse<T> = {
   body: T;
 };
 
+export const createSuccessResponse = <T>(
+  statusCode: HttpStatusCode,
+  body: T,
+): SuccessResponse<T> => {
+  return {
+    statusCode,
+    body,
+  };
+};
+
 export type ErrorResponse<T, U> = {
   statusCode: HttpStatusCode;
   body: {

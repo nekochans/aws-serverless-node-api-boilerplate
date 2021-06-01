@@ -4,6 +4,7 @@ import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
+  createSuccessResponse,
 } from '../response';
 
 import { UserEntity } from '../domain/types/userEntity';
@@ -84,12 +85,9 @@ export const createUser = async (
 
     const userEntity = await createUserEntity(prisma, newUser);
 
-    return {
-      statusCode: HttpStatusCode.created,
-      body: {
-        user: userEntity,
-      },
-    };
+    return createSuccessResponse<ResponseBody>(HttpStatusCode.created, {
+      user: userEntity,
+    });
   } catch (error) {
     // Prismaのエラーオブジェクトは下記のような仕様、これを元に判定する事は出来る
     // https://www.prisma.io/docs/reference/api-reference/error-reference

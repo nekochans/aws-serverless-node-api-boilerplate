@@ -2,6 +2,7 @@ import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
+  createSuccessResponse,
 } from '../response';
 import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
@@ -12,7 +13,11 @@ type Request = {
   status: number;
 };
 
-export type HelloSuccessResponse = SuccessResponse<{ message: string }>;
+type ResponseBody = {
+  message: string;
+};
+
+export type HelloSuccessResponse = SuccessResponse<ResponseBody>;
 
 export type Errors = {
   notAllowedMessage: 'message is not allowed';
@@ -62,12 +67,9 @@ export const hello = (
     };
   }
 
-  return {
-    statusCode: HttpStatusCode.ok,
-    body: {
-      message: `Hello ${request.name}, welcome to the exciting Serverless world! Your Status is ${request.status}!`,
-    },
-  };
+  return createSuccessResponse<ResponseBody>(HttpStatusCode.ok, {
+    message: `Hello ${request.name}, welcome to the exciting Serverless world! Your Status is ${request.status}!`,
+  });
 };
 
 export default hello;
