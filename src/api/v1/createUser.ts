@@ -11,6 +11,7 @@ import {
 
 import { UserEntity } from '../domain/types/userEntity';
 import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { valueOf } from '../utils/valueOf';
 
 type Request = {
   email: string;
@@ -23,9 +24,12 @@ type ResponseBody = {
 
 type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
 
-type ErrorCode = 'EmailAlreadyRegistered';
+type errors = {
+  EmailAlreadyRegistered: 'Email address is already registered';
+};
 
-type ErrorMessage = 'Email address is already registered';
+type ErrorCode = keyof errors;
+type ErrorMessage = valueOf<errors>;
 
 type CreateUserErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 

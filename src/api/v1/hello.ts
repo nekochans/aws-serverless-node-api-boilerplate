@@ -5,6 +5,7 @@ import {
   ValidationErrorResponse,
 } from '../Response';
 import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { valueOf } from '../utils/valueOf';
 
 type Request = {
   name: string;
@@ -13,9 +14,12 @@ type Request = {
 
 type SayHelloSuccessResponse = SuccessResponse<{ message: string }>;
 
-type ErrorCode = 'NotAllowedMessage';
+type errors = {
+  NotAllowedMessage: 'NotAllowedMessage';
+};
 
-type ErrorMessage = 'NotAllowedMessage';
+type ErrorCode = keyof errors;
+type ErrorMessage = valueOf<errors>;
 
 type SayHelloErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
