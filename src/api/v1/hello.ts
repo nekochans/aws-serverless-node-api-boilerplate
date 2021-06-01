@@ -1,11 +1,11 @@
-import Ajv from 'ajv';
 import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
-} from '../Response';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+} from '../response';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
+import validate from '../validate';
 
 type Request = {
   name: string;
@@ -41,30 +41,15 @@ const schema = {
   additionalProperties: false,
 };
 
-const ajv = new Ajv({ allErrors: true });
-
-const validate = ajv.compile(schema);
-
 export const hello = (
   request: Request,
 ): HelloSuccessResponse | HelloErrorResponse | ValidationErrorResponse => {
-  const valid = validate(request);
-
-  if (!valid) {
-    const validationErrors = validate.errors.map((value) => {
-      return {
-        key: value.instancePath.replace('/', ''),
-        reason: value.message,
-      };
-    });
-
-    return {
-      statusCode: HttpStatusCode.unprocessableEntity,
-      body: {
-        message: 'Unprocessable Entity',
-        validationErrors,
-      },
-    };
+  const validateResult = validate<Request>(schema, request);
+  if (
+    validateResult.isError === true &&
+    validateResult.validationErrorResponse
+  ) {
+    return validateResult.validationErrorResponse;
   }
 
   if (request.name === 'Error') {

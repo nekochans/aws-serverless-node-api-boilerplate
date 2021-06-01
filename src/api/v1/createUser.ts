@@ -1,17 +1,15 @@
-import Ajv from 'ajv';
-import addFormats from 'ajv-formats';
-
 import { PrismaClient, users } from '@prisma/client';
 
 import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
-} from '../Response';
+} from '../response';
 
 import { UserEntity } from '../domain/types/userEntity';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
+import validate from '../validate';
 
 type Request = {
   email: string;
@@ -51,11 +49,6 @@ const schema = {
   additionalProperties: false,
 };
 
-const ajv = new Ajv({ allErrors: true });
-addFormats(ajv);
-
-const validate = ajv.compile(schema);
-
 export const createUser = async (
   request: Request,
   prisma: PrismaClient,
@@ -63,23 +56,12 @@ export const createUser = async (
   CreateUserSuccessResponse | CreateUserErrorResponse | ValidationErrorResponse
 > => {
   try {
-    const valid = validate(request);
-
-    if (!valid) {
-      const validationErrors = validate.errors.map((value) => {
-        return {
-          key: value.instancePath.replace('/', ''),
-          reason: value.message,
-        };
-      });
-
-      return {
-        statusCode: HttpStatusCode.unprocessableEntity,
-        body: {
-          message: 'Unprocessable Entity',
-          validationErrors,
-        },
-      };
+    const validateResult = validate<Request>(schema, request);
+    if (
+      validateResult.isError === true &&
+      validateResult.validationErrorResponse
+    ) {
+      return validateResult.validationErrorResponse;
     }
 
     const user = await prisma.users_emails.findFirst({

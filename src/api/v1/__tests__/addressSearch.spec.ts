@@ -8,8 +8,11 @@ import addressSearch, {
   AddressSearchErrorResponse,
   AddressSearchSuccessResponse,
 } from '../addressSearch';
-import { ValidationErrorResponse } from '../../Response';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+import {
+  ValidationErrorResponse,
+  validationErrorResponseMessage,
+} from '../../response';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 
 describe('addressSearch', () => {
   afterEach(() => {
@@ -110,7 +113,7 @@ describe('addressSearch', () => {
     const expected: ValidationErrorResponse = {
       statusCode: HttpStatusCode.unprocessableEntity,
       body: {
-        message: `Unprocessable Entity`,
+        message: validationErrorResponseMessage(),
         validationErrors: [
           { key: 'postalCode', reason: 'must NOT have more than 7 characters' },
         ],

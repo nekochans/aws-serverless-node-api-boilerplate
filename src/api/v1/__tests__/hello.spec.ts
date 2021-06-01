@@ -1,5 +1,6 @@
 import hello, { HelloErrorResponse, HelloSuccessResponse } from '../hello';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { HttpStatusCode } from '@constants/httpStatusCode';
+import { validationErrorResponseMessage } from '../../response';
 
 describe('hello', () => {
   it('should return a success message', () => {
@@ -44,7 +45,7 @@ describe('hello', () => {
     const expected = {
       statusCode: HttpStatusCode.unprocessableEntity,
       body: {
-        message: `Unprocessable Entity`,
+        message: validationErrorResponseMessage(),
         validationErrors: [
           { key: 'name', reason: 'must NOT have more than 8 characters' },
           { key: 'status', reason: 'must be <= 1' },

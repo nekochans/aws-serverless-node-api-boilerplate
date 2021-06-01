@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 
 export type SuccessResponse<T> = {
   statusCode: HttpStatusCode;
@@ -13,10 +13,17 @@ export type ErrorResponse<T, U> = {
   };
 };
 
+type ValidationErrorResponseMessage = 'Unprocessable Entity';
+
+export const validationErrorResponseMessage =
+  (): ValidationErrorResponseMessage => {
+    return 'Unprocessable Entity';
+  };
+
 export type ValidationErrorResponse = {
   statusCode: typeof HttpStatusCode.unprocessableEntity;
   body: {
-    message: 'Unprocessable Entity';
+    message: ValidationErrorResponseMessage;
     validationErrors: { key: string; reason: string }[];
   };
 };

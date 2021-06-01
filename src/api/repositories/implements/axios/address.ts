@@ -4,7 +4,7 @@ import { FetchAddressByPostalCode } from '../../interfaces/address';
 import {
   FetchAddressByPostalCodeError,
   FetchAddressByPostalCodeErrorMessage,
-} from '../../errors/FetchAddressByPostalCodeError';
+} from '../../errors/fetchAddressByPostalCodeError';
 
 // Mockに置き換えられるように export する
 export const httpClient = axios.create({ timeout: 5000 });
@@ -44,7 +44,7 @@ export const fetchAddressByPostalCode: FetchAddressByPostalCode = async (
     if (apiResponse.data.message !== null || !apiResponse.data.results) {
       return Promise.reject(
         new FetchAddressByPostalCodeError(
-          FetchAddressByPostalCodeErrorMessage.addressDoseNotFoundError,
+          FetchAddressByPostalCodeErrorMessage.addressNotFoundError,
         ),
       );
     }
