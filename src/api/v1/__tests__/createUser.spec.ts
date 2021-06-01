@@ -4,6 +4,7 @@ import createUser, {
 } from '../createUser';
 import { PrismaClient } from '@prisma/client';
 import { ValidationErrorResponse } from '../../Response';
+import { HttpStatusCode } from '@constants/HttpStatusCode';
 
 describe.skip('createUser', () => {
   let prisma: PrismaClient;
@@ -31,7 +32,7 @@ describe.skip('createUser', () => {
     };
 
     const expected: CreateUserSuccessResponse = {
-      statusCode: 201,
+      statusCode: HttpStatusCode.created,
       body: {
         user: {
           id: 1,
@@ -55,7 +56,7 @@ describe.skip('createUser', () => {
     };
 
     const expected: CreateUserSuccessResponse = {
-      statusCode: 201,
+      statusCode: HttpStatusCode.created,
       body: {
         user: {
           id: 1,
@@ -79,7 +80,7 @@ describe.skip('createUser', () => {
     };
 
     const expected: CreateUserErrorResponse = {
-      statusCode: 400,
+      statusCode: HttpStatusCode.badRequest,
       body: {
         code: 'emailAlreadyRegistered',
         message: `email is already registered`,
@@ -99,7 +100,7 @@ describe.skip('createUser', () => {
     };
 
     const expected: ValidationErrorResponse = {
-      statusCode: 422,
+      statusCode: HttpStatusCode.unprocessableEntity,
       body: {
         message: `Unprocessable Entity`,
         validationErrors: [

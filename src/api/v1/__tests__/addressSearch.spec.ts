@@ -9,6 +9,7 @@ import addressSearch, {
   AddressSearchSuccessResponse,
 } from '../addressSearch';
 import { ValidationErrorResponse } from '../../Response';
+import { HttpStatusCode } from '@constants/HttpStatusCode';
 
 describe('addressSearch', () => {
   afterEach(() => {
@@ -30,19 +31,19 @@ describe('addressSearch', () => {
           zipcode: '1620062',
         },
       ],
-      status: 200,
+      status: HttpStatusCode.ok,
     };
 
     axiosMock
       .onGet('https://zipcloud.ibsnet.co.jp/api/search')
-      .reply(200, mockResponse);
+      .reply(HttpStatusCode.ok, mockResponse);
 
     const request = {
       postalCode: '1620062',
     };
 
     const expected: AddressSearchSuccessResponse = {
-      statusCode: 200,
+      statusCode: HttpStatusCode.ok,
       body: {
         postalCode: '1620062',
         region: '東京都',
@@ -61,7 +62,7 @@ describe('addressSearch', () => {
     };
 
     const expected: AddressSearchErrorResponse = {
-      statusCode: 400,
+      statusCode: HttpStatusCode.badRequest,
       body: {
         code: 'notAllowedPostalCode',
         message: 'not allowed to search by that postalCode',
@@ -77,19 +78,19 @@ describe('addressSearch', () => {
     const mockResponse = {
       message: null,
       results: null,
-      status: 200,
+      status: HttpStatusCode.ok,
     };
 
     axiosMock
       .onGet('https://zipcloud.ibsnet.co.jp/api/search')
-      .reply(200, mockResponse);
+      .reply(HttpStatusCode.ok, mockResponse);
 
     const request = {
       postalCode: '1620000',
     };
 
     const expected: AddressSearchErrorResponse = {
-      statusCode: 404,
+      statusCode: HttpStatusCode.notFound,
       body: {
         code: 'notFoundAddress',
         message: 'address is not found',
@@ -107,7 +108,7 @@ describe('addressSearch', () => {
     };
 
     const expected: ValidationErrorResponse = {
-      statusCode: 422,
+      statusCode: HttpStatusCode.unprocessableEntity,
       body: {
         message: `Unprocessable Entity`,
         validationErrors: [
