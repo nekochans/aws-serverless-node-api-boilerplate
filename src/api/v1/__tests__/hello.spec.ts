@@ -1,7 +1,4 @@
-import hello, {
-  SayHelloErrorResponse,
-  SayHelloSuccessResponse,
-} from '../hello';
+import hello, { HelloErrorResponse, HelloSuccessResponse } from '../hello';
 import { HttpStatusCode } from '@constants/HttpStatusCode';
 
 describe('hello', () => {
@@ -11,7 +8,7 @@ describe('hello', () => {
       status: 1,
     };
 
-    const expected: SayHelloSuccessResponse = {
+    const expected: HelloSuccessResponse = {
       statusCode: HttpStatusCode.ok,
       body: {
         message: `Hello ${request.name}, welcome to the exciting Serverless world! Your Status is ${request.status}!`,
@@ -27,7 +24,7 @@ describe('hello', () => {
       status: 1,
     };
 
-    const expected: SayHelloErrorResponse = {
+    const expected: HelloErrorResponse = {
       statusCode: HttpStatusCode.badRequest,
       body: {
         code: 'notAllowedMessage',

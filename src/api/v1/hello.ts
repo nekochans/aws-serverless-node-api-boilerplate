@@ -12,7 +12,7 @@ type Request = {
   status: number;
 };
 
-export type SayHelloSuccessResponse = SuccessResponse<{ message: string }>;
+export type HelloSuccessResponse = SuccessResponse<{ message: string }>;
 
 export type Errors = {
   notAllowedMessage: 'message is not allowed';
@@ -21,7 +21,7 @@ export type Errors = {
 type ErrorCode = keyof Errors;
 type ErrorMessage = valueOf<Errors>;
 
-export type SayHelloErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
+export type HelloErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
 const schema = {
   type: 'object',
@@ -47,10 +47,7 @@ const validate = ajv.compile(schema);
 
 export const hello = (
   request: Request,
-):
-  | SayHelloSuccessResponse
-  | SayHelloErrorResponse
-  | ValidationErrorResponse => {
+): HelloSuccessResponse | HelloErrorResponse | ValidationErrorResponse => {
   const valid = validate(request);
 
   if (!valid) {
