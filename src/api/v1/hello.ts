@@ -2,8 +2,8 @@ import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
-} from '../Response';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+} from '../response';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
 

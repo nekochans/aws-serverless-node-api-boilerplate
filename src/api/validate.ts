@@ -4,8 +4,8 @@ import addFormats from 'ajv-formats';
 import {
   ValidationErrorResponse,
   validationErrorResponseMessage,
-} from './Response';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+} from './response';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 
 type ValidateResult = {
   isError: boolean;

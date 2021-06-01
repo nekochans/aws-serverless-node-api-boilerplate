@@ -4,7 +4,7 @@ import type {
   Handler,
 } from 'aws-lambda';
 import type { FromSchema } from 'json-schema-to-ts';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 
 type ValidatedAPIGatewayProxyEvent<S, T, U, V> = Omit<
   APIGatewayProxyEventV2,

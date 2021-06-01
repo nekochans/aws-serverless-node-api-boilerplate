@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 
 export type SuccessResponse<T> = {
   statusCode: HttpStatusCode;

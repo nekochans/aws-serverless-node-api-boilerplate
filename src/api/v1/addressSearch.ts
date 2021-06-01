@@ -2,14 +2,14 @@ import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
-} from '../Response';
+} from '../response';
 import { FetchAddressByPostalCode } from '../repositories/interfaces/address';
 import {
   FetchAddressByPostalCodeError,
   FetchAddressByPostalCodeErrorMessage,
-} from '../repositories/errors/FetchAddressByPostalCodeError';
+} from '../repositories/errors/fetchAddressByPostalCodeError';
 import assertNever from '../utils/assertNever';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
 

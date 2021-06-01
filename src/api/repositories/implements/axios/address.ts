@@ -4,7 +4,7 @@ import { FetchAddressByPostalCode } from '../../interfaces/address';
 import {
   FetchAddressByPostalCodeError,
   FetchAddressByPostalCodeErrorMessage,
-} from '../../errors/FetchAddressByPostalCodeError';
+} from '../../errors/fetchAddressByPostalCodeError';
 
 // Mockに置き換えられるように export する
 export const httpClient = axios.create({ timeout: 5000 });

@@ -6,10 +6,10 @@ import { PrismaClient } from '@prisma/client';
 import {
   ValidationErrorResponse,
   validationErrorResponseMessage,
-} from '../../Response';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+} from '../../response';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 
-describe.skip('createUser', () => {
+describe('createUser', () => {
   let prisma: PrismaClient;
 
   beforeEach(async () => {

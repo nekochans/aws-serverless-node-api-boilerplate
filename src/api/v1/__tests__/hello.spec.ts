@@ -1,6 +1,6 @@
 import hello, { HelloErrorResponse, HelloSuccessResponse } from '../hello';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
-import { validationErrorResponseMessage } from '../../Response';
+import { HttpStatusCode } from '@constants/httpStatusCode';
+import { validationErrorResponseMessage } from '../../response';
 
 describe('hello', () => {
   it('should return a success message', () => {

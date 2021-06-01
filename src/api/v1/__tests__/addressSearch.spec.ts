@@ -11,8 +11,8 @@ import addressSearch, {
 import {
   ValidationErrorResponse,
   validationErrorResponseMessage,
-} from '../../Response';
-import { HttpStatusCode } from '@constants/HttpStatusCode';
+} from '../../response';
+import { HttpStatusCode } from '@constants/httpStatusCode';
 
 describe('addressSearch', () => {
   afterEach(() => {
