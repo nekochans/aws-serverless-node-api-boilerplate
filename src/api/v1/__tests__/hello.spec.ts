@@ -1,4 +1,5 @@
-import hello from '../hello';
+import hello, { HelloErrorResponse, HelloSuccessResponse } from '../hello';
+import { HttpStatusCode } from '@constants/HttpStatusCode';
 
 describe('hello', () => {
   it('should return a success message', () => {
@@ -7,8 +8,8 @@ describe('hello', () => {
       status: 1,
     };
 
-    const expected = {
-      statusCode: 200,
+    const expected: HelloSuccessResponse = {
+      statusCode: HttpStatusCode.ok,
       body: {
         message: `Hello ${request.name}, welcome to the exciting Serverless world! Your Status is ${request.status}!`,
       },
@@ -23,11 +24,11 @@ describe('hello', () => {
       status: 1,
     };
 
-    const expected = {
-      statusCode: 400,
+    const expected: HelloErrorResponse = {
+      statusCode: HttpStatusCode.badRequest,
       body: {
-        code: 'NotAllowedMessage',
-        message: 'NotAllowedMessage',
+        code: 'notAllowedMessage',
+        message: 'message is not allowed',
       },
     };
 
@@ -41,7 +42,7 @@ describe('hello', () => {
     };
 
     const expected = {
-      statusCode: 422,
+      statusCode: HttpStatusCode.unprocessableEntity,
       body: {
         message: `Unprocessable Entity`,
         validationErrors: [

@@ -4,7 +4,12 @@ const axiosMock = new MockAdapter(axios);
 
 // axiosMock を作った後にimportする事でMockに置き換えられる
 import { fetchAddressByPostalCode } from '../../repositories/implements/axios/address';
-import addressSearch from '../addressSearch';
+import addressSearch, {
+  AddressSearchErrorResponse,
+  AddressSearchSuccessResponse,
+} from '../addressSearch';
+import { ValidationErrorResponse } from '../../Response';
+import { HttpStatusCode } from '@constants/HttpStatusCode';
 
 describe('addressSearch', () => {
   afterEach(() => {
@@ -26,19 +31,19 @@ describe('addressSearch', () => {
           zipcode: '1620062',
         },
       ],
-      status: 200,
+      status: HttpStatusCode.ok,
     };
 
     axiosMock
       .onGet('https://zipcloud.ibsnet.co.jp/api/search')
-      .reply(200, mockResponse);
+      .reply(HttpStatusCode.ok, mockResponse);
 
     const request = {
       postalCode: '1620062',
     };
 
-    const expected = {
-      statusCode: 200,
+    const expected: AddressSearchSuccessResponse = {
+      statusCode: HttpStatusCode.ok,
       body: {
         postalCode: '1620062',
         region: '東京都',
@@ -56,10 +61,10 @@ describe('addressSearch', () => {
       postalCode: '1000000',
     };
 
-    const expected = {
-      statusCode: 400,
+    const expected: AddressSearchErrorResponse = {
+      statusCode: HttpStatusCode.badRequest,
       body: {
-        code: 'NotAllowedPostalCode',
+        code: 'notAllowedPostalCode',
         message: 'not allowed to search by that postalCode',
       },
     };
@@ -73,21 +78,21 @@ describe('addressSearch', () => {
     const mockResponse = {
       message: null,
       results: null,
-      status: 200,
+      status: HttpStatusCode.ok,
     };
 
     axiosMock
       .onGet('https://zipcloud.ibsnet.co.jp/api/search')
-      .reply(200, mockResponse);
+      .reply(HttpStatusCode.ok, mockResponse);
 
     const request = {
       postalCode: '1620000',
     };
 
-    const expected = {
-      statusCode: 404,
+    const expected: AddressSearchErrorResponse = {
+      statusCode: HttpStatusCode.notFound,
       body: {
-        code: 'NotFoundAddress',
+        code: 'notFoundAddress',
         message: 'address is not found',
       },
     };
@@ -102,8 +107,8 @@ describe('addressSearch', () => {
       postalCode: '12345678',
     };
 
-    const expected = {
-      statusCode: 422,
+    const expected: ValidationErrorResponse = {
+      statusCode: HttpStatusCode.unprocessableEntity,
       body: {
         message: `Unprocessable Entity`,
         validationErrors: [

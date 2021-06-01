@@ -10,6 +10,8 @@ import {
   FetchAddressByPostalCodeErrorMessage,
 } from '../repositories/errors/FetchAddressByPostalCodeError';
 import assertNever from '../utils/assertNever';
+import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { valueOf } from '../utils/valueOf';
 
 type Request = {
   postalCode: string;
@@ -21,16 +23,18 @@ type ResponseBody = {
   locality: string;
 };
 
-type AddressSearchSuccessResponse = SuccessResponse<ResponseBody>;
+export type AddressSearchSuccessResponse = SuccessResponse<ResponseBody>;
 
-type ErrorCode = 'NotFoundAddress' | 'NotAllowedPostalCode' | 'UnexpectedError';
+type Errors = {
+  notFoundAddress: 'address is not found';
+  notAllowedPostalCode: 'not allowed to search by that postalCode';
+  unexpectedError: 'unexpected error';
+};
 
-type ErrorMessage =
-  | 'address is not found'
-  | 'not allowed to search by that postalCode'
-  | 'unexpected error';
+type ErrorCode = keyof Errors;
+type ErrorMessage = valueOf<Errors>;
 
-type AddressSearchErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
+export type AddressSearchErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
 const schema = {
   type: 'object',
@@ -69,7 +73,7 @@ export const addressSearch = async (
       });
 
       return {
-        statusCode: 422,
+        statusCode: HttpStatusCode.unprocessableEntity,
         body: {
           message: 'Unprocessable Entity',
           validationErrors,
@@ -79,9 +83,9 @@ export const addressSearch = async (
 
     if (request.postalCode === '1000000') {
       return {
-        statusCode: 400,
+        statusCode: HttpStatusCode.badRequest,
         body: {
-          code: 'NotAllowedPostalCode',
+          code: 'notAllowedPostalCode',
           message: 'not allowed to search by that postalCode',
         },
       };
@@ -90,7 +94,7 @@ export const addressSearch = async (
     const address = await fetchAddressByPostalCode(request.postalCode);
 
     return {
-      statusCode: 200,
+      statusCode: HttpStatusCode.ok,
       body: address,
     };
   } catch (error) {
@@ -104,19 +108,19 @@ const createErrorResponse = (
   const errorMessage = error.message as FetchAddressByPostalCodeErrorMessage;
 
   switch (errorMessage) {
-    case 'AddressDoseNotFoundError':
+    case 'addressDoseNotFoundError':
       return {
-        statusCode: 404,
+        statusCode: HttpStatusCode.notFound,
         body: {
-          code: 'NotFoundAddress',
+          code: 'notFoundAddress',
           message: 'address is not found',
         },
       };
-    case 'UnexpectedError':
+    case 'unexpectedError':
       return {
-        statusCode: 500,
+        statusCode: HttpStatusCode.internalServerError,
         body: {
-          code: 'UnexpectedError',
+          code: 'unexpectedError',
           message: 'unexpected error',
         },
       };

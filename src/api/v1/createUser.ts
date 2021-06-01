@@ -10,6 +10,8 @@ import {
 } from '../Response';
 
 import { UserEntity } from '../domain/types/userEntity';
+import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { valueOf } from '../utils/valueOf';
 
 type Request = {
   email: string;
@@ -20,13 +22,16 @@ type ResponseBody = {
   user: UserEntity;
 };
 
-type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
+export type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
 
-type ErrorCode = 'EmailAlreadyRegistered';
+type Errors = {
+  emailAlreadyRegistered: 'email is already registered';
+};
 
-type ErrorMessage = 'Email address is already registered';
+type ErrorCode = keyof Errors;
+type ErrorMessage = valueOf<Errors>;
 
-type CreateUserErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
+export type CreateUserErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
 const schema = {
   type: 'object',
@@ -69,7 +74,7 @@ export const createUser = async (
       });
 
       return {
-        statusCode: 422,
+        statusCode: HttpStatusCode.unprocessableEntity,
         body: {
           message: 'Unprocessable Entity',
           validationErrors,
@@ -85,10 +90,10 @@ export const createUser = async (
 
     if (user) {
       return {
-        statusCode: 400,
+        statusCode: HttpStatusCode.badRequest,
         body: {
-          code: 'EmailAlreadyRegistered',
-          message: 'Email address is already registered',
+          code: 'emailAlreadyRegistered',
+          message: 'email is already registered',
         },
       };
     }
@@ -98,7 +103,7 @@ export const createUser = async (
     const userEntity = await createUserEntity(prisma, newUser);
 
     return {
-      statusCode: 201,
+      statusCode: HttpStatusCode.created,
       body: {
         user: userEntity,
       },
@@ -111,19 +116,19 @@ export const createUser = async (
       error?.meta?.target === 'uq_users_emails_02'
     ) {
       return {
-        statusCode: 400,
+        statusCode: HttpStatusCode.badRequest,
         body: {
-          code: 'EmailAlreadyRegistered',
-          message: 'Email address is already registered',
+          code: 'emailAlreadyRegistered',
+          message: 'email is already registered',
         },
       };
     }
 
     return {
-      statusCode: 500,
+      statusCode: HttpStatusCode.internalServerError,
       body: {
-        code: 'EmailAlreadyRegistered',
-        message: 'Email address is already registered',
+        code: 'emailAlreadyRegistered',
+        message: 'email is already registered',
       },
     };
   } finally {

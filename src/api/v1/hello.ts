@@ -4,19 +4,24 @@ import {
   ErrorResponse,
   ValidationErrorResponse,
 } from '../Response';
+import { HttpStatusCode } from '@constants/HttpStatusCode';
+import { valueOf } from '../utils/valueOf';
 
 type Request = {
   name: string;
   status: number;
 };
 
-type SayHelloSuccessResponse = SuccessResponse<{ message: string }>;
+export type HelloSuccessResponse = SuccessResponse<{ message: string }>;
 
-type ErrorCode = 'NotAllowedMessage';
+export type Errors = {
+  notAllowedMessage: 'message is not allowed';
+};
 
-type ErrorMessage = 'NotAllowedMessage';
+type ErrorCode = keyof Errors;
+type ErrorMessage = valueOf<Errors>;
 
-type SayHelloErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
+export type HelloErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
 const schema = {
   type: 'object',
@@ -42,10 +47,7 @@ const validate = ajv.compile(schema);
 
 export const hello = (
   request: Request,
-):
-  | SayHelloSuccessResponse
-  | SayHelloErrorResponse
-  | ValidationErrorResponse => {
+): HelloSuccessResponse | HelloErrorResponse | ValidationErrorResponse => {
   const valid = validate(request);
 
   if (!valid) {
@@ -57,7 +59,7 @@ export const hello = (
     });
 
     return {
-      statusCode: 422,
+      statusCode: HttpStatusCode.unprocessableEntity,
       body: {
         message: 'Unprocessable Entity',
         validationErrors,
@@ -67,16 +69,16 @@ export const hello = (
 
   if (request.name === 'Error') {
     return {
-      statusCode: 400,
+      statusCode: HttpStatusCode.badRequest,
       body: {
-        code: 'NotAllowedMessage',
-        message: 'NotAllowedMessage',
+        code: 'notAllowedMessage',
+        message: 'message is not allowed',
       },
     };
   }
 
   return {
-    statusCode: 200,
+    statusCode: HttpStatusCode.ok,
     body: {
       message: `Hello ${request.name}, welcome to the exciting Serverless world! Your Status is ${request.status}!`,
     },
