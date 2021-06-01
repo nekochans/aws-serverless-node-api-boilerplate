@@ -24,12 +24,12 @@ type ResponseBody = {
 
 type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
 
-type errors = {
+type Errors = {
   EmailAlreadyRegistered: 'Email address is already registered';
 };
 
-type ErrorCode = keyof errors;
-type ErrorMessage = valueOf<errors>;
+type ErrorCode = keyof Errors;
+type ErrorMessage = valueOf<Errors>;
 
 type CreateUserErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 

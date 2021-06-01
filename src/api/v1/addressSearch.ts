@@ -25,14 +25,14 @@ type ResponseBody = {
 
 type AddressSearchSuccessResponse = SuccessResponse<ResponseBody>;
 
-type errors = {
+type Errors = {
   NotFoundAddress: 'address is not found';
   NotAllowedPostalCode: 'not allowed to search by that postalCode';
   UnexpectedError: 'unexpected error';
 };
 
-type ErrorCode = keyof errors;
-type ErrorMessage = valueOf<errors>;
+type ErrorCode = keyof Errors;
+type ErrorMessage = valueOf<Errors>;
 
 type AddressSearchErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 

@@ -14,12 +14,12 @@ type Request = {
 
 type SayHelloSuccessResponse = SuccessResponse<{ message: string }>;
 
-type errors = {
+export type Errors = {
   NotAllowedMessage: 'NotAllowedMessage';
 };
 
-type ErrorCode = keyof errors;
-type ErrorMessage = valueOf<errors>;
+type ErrorCode = keyof Errors;
+type ErrorMessage = valueOf<Errors>;
 
 type SayHelloErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 
