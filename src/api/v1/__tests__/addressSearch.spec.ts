@@ -14,7 +14,7 @@ import {
 } from '../../response';
 import { HttpStatusCode } from '@constants/httpStatusCode';
 
-describe.skip('addressSearch', () => {
+describe('addressSearch', () => {
   afterEach(() => {
     axiosMock.restore();
   });
