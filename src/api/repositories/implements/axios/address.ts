@@ -44,7 +44,7 @@ export const fetchAddressByPostalCode: FetchAddressByPostalCode = async (
     if (apiResponse.data.message !== null || !apiResponse.data.results) {
       return Promise.reject(
         new FetchAddressByPostalCodeError(
-          FetchAddressByPostalCodeErrorMessage.addressDoseNotFoundError,
+          FetchAddressByPostalCodeErrorMessage.addressNotFoundError,
         ),
       );
     }

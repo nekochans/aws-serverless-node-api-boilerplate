@@ -93,7 +93,7 @@ const createErrorResponse = (
   const errorMessage = error.message as FetchAddressByPostalCodeErrorMessage;
 
   switch (errorMessage) {
-    case 'addressDoseNotFoundError':
+    case 'addressNotFoundError':
       return {
         statusCode: HttpStatusCode.notFound,
         body: {
