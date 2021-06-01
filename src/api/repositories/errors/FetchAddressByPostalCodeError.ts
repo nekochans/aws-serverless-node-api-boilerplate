@@ -3,8 +3,8 @@ import ExtensibleCustomError from 'extensible-custom-error';
 export class FetchAddressByPostalCodeError extends ExtensibleCustomError {}
 
 export const FetchAddressByPostalCodeErrorMessage = {
-  addressDoseNotFoundError: 'AddressDoseNotFoundError',
-  unexpectedError: 'UnexpectedError',
+  addressDoseNotFoundError: 'addressDoseNotFoundError',
+  unexpectedError: 'unexpectedError',
 } as const;
 
 export type FetchAddressByPostalCodeErrorMessage =

@@ -108,7 +108,7 @@ const createErrorResponse = (
   const errorMessage = error.message as FetchAddressByPostalCodeErrorMessage;
 
   switch (errorMessage) {
-    case 'AddressDoseNotFoundError':
+    case 'addressDoseNotFoundError':
       return {
         statusCode: HttpStatusCode.notFound,
         body: {
@@ -116,7 +116,7 @@ const createErrorResponse = (
           message: 'address is not found',
         },
       };
-    case 'UnexpectedError':
+    case 'unexpectedError':
       return {
         statusCode: HttpStatusCode.internalServerError,
         body: {

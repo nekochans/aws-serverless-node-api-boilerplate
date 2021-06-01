@@ -57,7 +57,7 @@ export const fetchAddressByPostalCode: FetchAddressByPostalCode = async (
   } catch (error) {
     return Promise.reject(
       new FetchAddressByPostalCodeError(
-        FetchAddressByPostalCodeErrorMessage.addressDoseNotFoundError,
+        FetchAddressByPostalCodeErrorMessage.unexpectedError,
         error,
       ),
     );
