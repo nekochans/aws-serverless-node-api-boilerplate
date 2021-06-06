@@ -4,6 +4,8 @@ import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
+  createSuccessResponse,
+  createErrorResponse,
 } from '../response';
 
 import { UserEntity } from '../domain/types/userEntity';
@@ -24,6 +26,7 @@ export type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
 
 type Errors = {
   emailAlreadyRegistered: 'email is already registered';
+  dbError: 'error in database';
 };
 
 type ErrorCode = keyof Errors;
@@ -71,25 +74,21 @@ export const createUser = async (
     });
 
     if (user) {
-      return {
+      return createErrorResponse<ErrorCode, ErrorMessage>({
         statusCode: HttpStatusCode.badRequest,
-        body: {
-          code: 'emailAlreadyRegistered',
-          message: 'email is already registered',
-        },
-      };
+        errorCode: 'emailAlreadyRegistered',
+        errorMessage: 'email is already registered',
+      });
     }
 
     const newUser = await prisma.users.create(createUserParams(request));
 
     const userEntity = await createUserEntity(prisma, newUser);
 
-    return {
+    return createSuccessResponse<ResponseBody>({
       statusCode: HttpStatusCode.created,
-      body: {
-        user: userEntity,
-      },
-    };
+      body: { user: userEntity },
+    });
   } catch (error) {
     // Prismaのエラーオブジェクトは下記のような仕様、これを元に判定する事は出来る
     // https://www.prisma.io/docs/reference/api-reference/error-reference
@@ -97,22 +96,18 @@ export const createUser = async (
       error?.code === 'P2002' &&
       error?.meta?.target === 'uq_users_emails_02'
     ) {
-      return {
+      return createErrorResponse<ErrorCode, ErrorMessage>({
         statusCode: HttpStatusCode.badRequest,
-        body: {
-          code: 'emailAlreadyRegistered',
-          message: 'email is already registered',
-        },
-      };
+        errorCode: 'emailAlreadyRegistered',
+        errorMessage: 'email is already registered',
+      });
     }
 
-    return {
+    return createErrorResponse<ErrorCode, ErrorMessage>({
       statusCode: HttpStatusCode.internalServerError,
-      body: {
-        code: 'emailAlreadyRegistered',
-        message: 'email is already registered',
-      },
-    };
+      errorCode: 'dbError',
+      errorMessage: 'error in database',
+    });
   } finally {
     await prisma.$disconnect();
   }
