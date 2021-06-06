@@ -4,7 +4,7 @@ import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
-  createSuccessResponse,
+  createSuccessResponse, createErrorResponse,
 } from '../response';
 
 import { UserEntity } from '../domain/types/userEntity';
@@ -25,6 +25,7 @@ export type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
 
 type Errors = {
   emailAlreadyRegistered: 'email is already registered';
+  dbError: 'error in database',
 };
 
 type ErrorCode = keyof Errors;
@@ -95,22 +96,18 @@ export const createUser = async (
       error?.code === 'P2002' &&
       error?.meta?.target === 'uq_users_emails_02'
     ) {
-      return {
+      return createErrorResponse<ErrorCode, ErrorMessage>({
         statusCode: HttpStatusCode.badRequest,
-        body: {
-          code: 'emailAlreadyRegistered',
-          message: 'email is already registered',
-        },
-      };
+        errorCode: 'emailAlreadyRegistered',
+        errorMessage: 'email is already registered',
+      });
     }
 
-    return {
+    return createErrorResponse<ErrorCode, ErrorMessage>({
       statusCode: HttpStatusCode.internalServerError,
-      body: {
-        code: 'emailAlreadyRegistered',
-        message: 'email is already registered',
-      },
-    };
+      errorCode: 'dbError',
+      errorMessage: 'error in database',
+    });
   } finally {
     await prisma.$disconnect();
   }
