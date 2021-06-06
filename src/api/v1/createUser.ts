@@ -4,7 +4,8 @@ import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
-  createSuccessResponse, createErrorResponse,
+  createSuccessResponse,
+  createErrorResponse,
 } from '../response';
 
 import { UserEntity } from '../domain/types/userEntity';
@@ -25,7 +26,7 @@ export type CreateUserSuccessResponse = SuccessResponse<ResponseBody>;
 
 type Errors = {
   emailAlreadyRegistered: 'email is already registered';
-  dbError: 'error in database',
+  dbError: 'error in database';
 };
 
 type ErrorCode = keyof Errors;
@@ -86,8 +87,9 @@ export const createUser = async (
 
     const userEntity = await createUserEntity(prisma, newUser);
 
-    return createSuccessResponse<ResponseBody>(HttpStatusCode.created, {
-      user: userEntity,
+    return createSuccessResponse<ResponseBody>({
+      statusCode: HttpStatusCode.created,
+      body: { user: userEntity },
     });
   } catch (error) {
     // Prismaのエラーオブジェクトは下記のような仕様、これを元に判定する事は出来る

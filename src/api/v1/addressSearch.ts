@@ -78,7 +78,10 @@ export const addressSearch = async (
 
     const address = await fetchAddressByPostalCode(request.postalCode);
 
-    return createSuccessResponse<ResponseBody>(HttpStatusCode.ok, address);
+    return createSuccessResponse<ResponseBody>({
+      statusCode: HttpStatusCode.ok,
+      body: address,
+    });
   } catch (error) {
     return createAddressSearchErrorResponse(error);
   }

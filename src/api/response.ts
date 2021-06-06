@@ -5,13 +5,13 @@ export type SuccessResponse<T> = {
   body: T;
 };
 
-export const createSuccessResponse = <T>(
-  statusCode: HttpStatusCode,
-  body: T,
-): SuccessResponse<T> => {
+export const createSuccessResponse = <T>(params: {
+  statusCode: HttpStatusCode;
+  body: T;
+}): SuccessResponse<T> => {
   return {
-    statusCode,
-    body,
+    statusCode: params.statusCode,
+    body: params.body,
   };
 };
 

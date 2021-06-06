@@ -2,7 +2,8 @@ import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
-  createSuccessResponse, createErrorResponse,
+  createSuccessResponse,
+  createErrorResponse,
 } from '../response';
 import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
@@ -65,8 +66,11 @@ export const hello = (
     });
   }
 
-  return createSuccessResponse<ResponseBody>(HttpStatusCode.ok, {
-    message: `Hello ${request.name}, welcome to the exciting Serverless world! Your Status is ${request.status}!`,
+  return createSuccessResponse<ResponseBody>({
+    statusCode: HttpStatusCode.ok,
+    body: {
+      message: `Hello ${request.name}, welcome to the exciting Serverless world! Your Status is ${request.status}!`,
+    },
   });
 };
 
