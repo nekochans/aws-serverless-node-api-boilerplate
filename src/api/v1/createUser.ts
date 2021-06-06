@@ -74,13 +74,11 @@ export const createUser = async (
     });
 
     if (user) {
-      return {
+      return createErrorResponse<ErrorCode, ErrorMessage>({
         statusCode: HttpStatusCode.badRequest,
-        body: {
-          code: 'emailAlreadyRegistered',
-          message: 'email is already registered',
-        },
-      };
+        errorCode: 'emailAlreadyRegistered',
+        errorMessage: 'email is already registered',
+      });
     }
 
     const newUser = await prisma.users.create(createUserParams(request));
