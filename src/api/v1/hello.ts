@@ -2,7 +2,7 @@ import {
   SuccessResponse,
   ErrorResponse,
   ValidationErrorResponse,
-  createSuccessResponse,
+  createSuccessResponse, createErrorResponse,
 } from '../response';
 import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
@@ -58,13 +58,11 @@ export const hello = (
   }
 
   if (request.name === 'Error') {
-    return {
+    return createErrorResponse<ErrorCode, ErrorMessage>({
       statusCode: HttpStatusCode.badRequest,
-      body: {
-        code: 'notAllowedMessage',
-        message: 'message is not allowed',
-      },
-    };
+      errorCode: 'notAllowedMessage',
+      errorMessage: 'message is not allowed',
+    });
   }
 
   return createSuccessResponse<ResponseBody>(HttpStatusCode.ok, {

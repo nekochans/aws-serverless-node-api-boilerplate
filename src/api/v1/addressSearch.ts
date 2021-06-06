@@ -3,6 +3,7 @@ import {
   ErrorResponse,
   ValidationErrorResponse,
   createSuccessResponse,
+  createErrorResponse,
 } from '../response';
 import { FetchAddressByPostalCode } from '../repositories/interfaces/address';
 import {
@@ -68,45 +69,39 @@ export const addressSearch = async (
     }
 
     if (request.postalCode === '1000000') {
-      return {
+      return createErrorResponse<ErrorCode, ErrorMessage>({
         statusCode: HttpStatusCode.badRequest,
-        body: {
-          code: 'notAllowedPostalCode',
-          message: 'not allowed to search by that postalCode',
-        },
-      };
+        errorCode: 'notAllowedPostalCode',
+        errorMessage: 'not allowed to search by that postalCode',
+      });
     }
 
     const address = await fetchAddressByPostalCode(request.postalCode);
 
     return createSuccessResponse<ResponseBody>(HttpStatusCode.ok, address);
   } catch (error) {
-    return createErrorResponse(error);
+    return createAddressSearchErrorResponse(error);
   }
 };
 
-const createErrorResponse = (
+const createAddressSearchErrorResponse = (
   error: FetchAddressByPostalCodeError,
 ): AddressSearchErrorResponse => {
   const errorMessage = error.message as FetchAddressByPostalCodeErrorMessage;
 
   switch (errorMessage) {
     case 'addressNotFoundError':
-      return {
+      return createErrorResponse<ErrorCode, ErrorMessage>({
         statusCode: HttpStatusCode.notFound,
-        body: {
-          code: 'notFoundAddress',
-          message: 'address is not found',
-        },
-      };
+        errorCode: 'notFoundAddress',
+        errorMessage: 'address is not found',
+      });
     case 'unexpectedError':
-      return {
+      return createErrorResponse<ErrorCode, ErrorMessage>({
         statusCode: HttpStatusCode.internalServerError,
-        body: {
-          code: 'unexpectedError',
-          message: 'unexpected error',
-        },
-      };
+        errorCode: 'unexpectedError',
+        errorMessage: 'unexpected error',
+      });
     default:
       return assertNever(errorMessage);
   }

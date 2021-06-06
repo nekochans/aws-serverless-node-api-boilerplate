@@ -23,6 +23,20 @@ export type ErrorResponse<T, U> = {
   };
 };
 
+export const createErrorResponse = <T, U>(params: {
+  statusCode: HttpStatusCode;
+  errorCode: T;
+  errorMessage: U;
+}): ErrorResponse<T, U> => {
+  return {
+    statusCode: params.statusCode,
+    body: {
+      code: params.errorCode,
+      message: params.errorMessage,
+    },
+  };
+};
+
 type ValidationErrorResponseMessage = 'Unprocessable Entity';
 
 export const validationErrorResponseMessage =
