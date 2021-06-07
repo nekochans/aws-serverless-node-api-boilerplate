@@ -8,6 +8,7 @@ import {
 import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
+import { HelloSchema } from '../domain/types/schemas/helloSchema';
 
 type Request = {
   helloId: string;
@@ -31,11 +32,7 @@ export type HelloWithPathErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 const schema = {
   type: 'object',
   properties: {
-    helloId: {
-      type: 'string',
-      minLength: 4,
-      maxLength: 8,
-    },
+    helloId: HelloSchema.helloId,
   },
   required: ['helloId'],
   additionalProperties: false,

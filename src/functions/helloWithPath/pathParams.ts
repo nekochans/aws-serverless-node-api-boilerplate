@@ -1,7 +1,9 @@
+import { HelloSchema } from '../../api/domain/types/schemas/helloSchema';
+
 export default {
   type: 'object',
   properties: {
-    helloId: { type: 'string' },
+    helloId: HelloSchema.helloId,
   },
   required: ['helloId'],
 } as const;

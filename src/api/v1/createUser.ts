@@ -12,6 +12,7 @@ import { UserEntity } from '../domain/types/userEntity';
 import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
+import { UserSchema } from '../domain/types/schemas/userSchema';
 
 type Request = {
   email: string;
@@ -37,16 +38,8 @@ export type CreateUserErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 const schema = {
   type: 'object',
   properties: {
-    email: {
-      type: 'string',
-      format: 'email',
-      maxLength: 254,
-    },
-    phoneNumber: {
-      type: 'string',
-      minLength: 10,
-      maxLength: 11,
-    },
+    email: UserSchema.email,
+    phoneNumber: UserSchema.phoneNumber,
   },
   required: ['email'],
   additionalProperties: false,
