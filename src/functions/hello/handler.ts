@@ -16,9 +16,11 @@ const helloHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultPathParams,
   typeof defaultQueryParams
 > = async (event) => {
-  const apiRes = hello(event.body);
+  const request = event.body;
 
-  return formatJsonResponse(apiRes.statusCode, apiRes.body);
+  const response = hello(request);
+
+  return formatJsonResponse(response.statusCode, response.body);
 };
 
 export const main = middyfy(helloHandler);
