@@ -1,16 +1,10 @@
+import { HelloSchema } from '../../api/domain/types/schemas/helloSchema';
+
 export default {
   type: 'object',
   properties: {
-    name: {
-      type: 'string',
-      minLength: 4,
-      maxLength: 8,
-    },
-    status: {
-      type: 'number',
-      minimum: 1,
-      maximum: 1,
-    },
+    name: HelloSchema.name,
+    status: HelloSchema.status,
   },
   required: ['name', 'status'],
 } as const;

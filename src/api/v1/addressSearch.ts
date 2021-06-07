@@ -14,6 +14,7 @@ import assertNever from '../utils/assertNever';
 import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
+import { AddressSchema } from '../domain/types/schemas/addressSchema';
 
 type Request = {
   postalCode: string;
@@ -41,11 +42,7 @@ export type AddressSearchErrorResponse = ErrorResponse<ErrorCode, ErrorMessage>;
 const schema = {
   type: 'object',
   properties: {
-    postalCode: {
-      type: 'string',
-      minLength: 7,
-      maxLength: 7,
-    },
+    postalCode: AddressSchema.postalCode,
   },
   required: ['postalCode'],
   additionalProperties: false,

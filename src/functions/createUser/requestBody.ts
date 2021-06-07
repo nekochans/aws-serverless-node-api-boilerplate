@@ -1,16 +1,10 @@
+import { UserSchema } from '../../api/domain/types/schemas/userSchema';
+
 export default {
   type: 'object',
   properties: {
-    email: {
-      type: 'string',
-      format: 'email',
-      maxLength: 254,
-    },
-    phoneNumber: {
-      type: 'string',
-      minLength: 10,
-      maxLength: 11,
-    },
+    email: UserSchema.email,
+    phoneNumber: UserSchema.phoneNumber,
   },
   required: ['email'],
 } as const;
