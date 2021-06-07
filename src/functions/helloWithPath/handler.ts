@@ -9,6 +9,7 @@ import defaultRequestBody from '@constants/defaultRequestBody';
 
 import pathParams from './pathParams';
 import queryParams from './queryParams';
+import helloWithPath from '../../api/v1/helloWithPath';
 
 const helloWithPathHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultRequestHeader,
@@ -16,12 +17,11 @@ const helloWithPathHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof pathParams,
   typeof queryParams
 > = async (event) => {
-  const responseBody = {
-    message: `HelloWithPath ${event.pathParameters.helloId}, welcome to the exciting Serverless world!`,
-    event,
-  };
+  const request = event.pathParameters;
 
-  return formatJsonResponse(200, responseBody);
+  const response = helloWithPath(request);
+
+  return formatJsonResponse(response.statusCode, response.body);
 };
 
 export const main = middyfy(helloWithPathHandler);
