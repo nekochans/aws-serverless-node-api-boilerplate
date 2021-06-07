@@ -1,5 +1,5 @@
 import type { AWS } from '@serverless/typescript';
-import {hello, helloWithPath, addressSearch, createUser} from '@functions/index';
+import { hello, helloWithPath, addressSearch, createUser } from '@functions/index';
 
 const serverlessConfiguration: AWS = {
   service: 'serverless-node-api',
