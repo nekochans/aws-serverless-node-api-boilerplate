@@ -1,16 +1,43 @@
 import { PrismaClient, users } from '@prisma/client';
-import { UserEntity } from '../../../../domain/types/userEntity';
-import { CreateNewUser, CreateNewUserParams } from '../../../interfaces/user';
+import {
+  CreateNewUser,
+  CreateNewUserParams,
+  CreateNewUserResponse,
+} from '../../interfaces/user';
+import {
+  CreateNewUserError,
+  CreateNewUserErrorMessage,
+} from '../../errors/createNewUserError';
 
 export const createNewUser: CreateNewUser<PrismaClient> = async (
   datastoreClient,
   { email, phoneNumber },
-): Promise<UserEntity> => {
+): Promise<CreateNewUserResponse> => {
+  const user = await datastoreClient.users_emails.findFirst({
+    where: {
+      email: email,
+    },
+  });
+
+  if (user) {
+    return {
+      isSuccessful: false,
+      error: new CreateNewUserError(
+        CreateNewUserErrorMessage.emailAlreadyRegisteredError,
+      ),
+    };
+  }
+
   const newUser = await datastoreClient.users.create(
     createUserParams({ email, phoneNumber }),
   );
 
-  return await createUserEntity(datastoreClient, newUser);
+  const userEntity = await createUserEntity(datastoreClient, newUser);
+
+  return {
+    isSuccessful: true,
+    userEntity: userEntity,
+  };
 };
 
 const createUserParams = (createNewUserParams: CreateNewUserParams) => {

@@ -1,4 +1,4 @@
-import { PrismaClient, users } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 import {
   SuccessResponse,
@@ -13,6 +13,9 @@ import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
 import { UserSchema } from '../domain/types/schemas/userSchema';
+import { createNewUser } from '../repositories/implements/prisma/user';
+import { CreateNewUserErrorMessage } from '../repositories/errors/createNewUserError';
+import assertNever from '../utils/assertNever';
 
 type Request = {
   email: string;
@@ -60,29 +63,32 @@ export const createUser = async (
       return validateResult.validationErrorResponse;
     }
 
-    const user = await prisma.users_emails.findFirst({
-      where: {
-        email: request.email,
-      },
-    });
+    const createNewUserResponse = await createNewUser(prisma, request);
 
-    if (user) {
-      return createErrorResponse<ErrorCode, ErrorMessage>({
-        statusCode: HttpStatusCode.badRequest,
-        errorCode: 'emailAlreadyRegistered',
-        errorMessage: 'email is already registered',
-      });
+    if (
+      createNewUserResponse.isSuccessful === false &&
+      createNewUserResponse.error
+    ) {
+      const errorMessage = createNewUserResponse.error
+        .message as CreateNewUserErrorMessage;
+      switch (errorMessage) {
+        case 'emailAlreadyRegisteredError':
+          return createErrorResponse<ErrorCode, ErrorMessage>({
+            statusCode: HttpStatusCode.badRequest,
+            errorCode: 'emailAlreadyRegistered',
+            errorMessage: 'email is already registered',
+          });
+        default:
+          assertNever(errorMessage);
+      }
     }
-
-    const newUser = await prisma.users.create(createUserParams(request));
-
-    const userEntity = await createUserEntity(prisma, newUser);
 
     return createSuccessResponse<ResponseBody>({
       statusCode: HttpStatusCode.created,
-      body: { user: userEntity },
+      body: { user: createNewUserResponse.userEntity },
     });
   } catch (error) {
+    // TODO このブロックの処理は src/api/repositories/implements/prisma/user.ts に移動させる
     // Prismaのエラーオブジェクトは下記のような仕様、これを元に判定する事は出来る
     // https://www.prisma.io/docs/reference/api-reference/error-reference
     if (
@@ -104,54 +110,6 @@ export const createUser = async (
   } finally {
     await prisma.$disconnect();
   }
-};
-
-const createUserParams = (request: Request) => {
-  const params = {
-    data: {
-      users_emails: {
-        create: { email: request.email },
-      },
-    },
-  };
-
-  if (request.phoneNumber !== undefined) {
-    params.data['users_phone_numbers'] = {
-      create: [{ phone_number: request.phoneNumber }],
-    };
-  }
-
-  return params;
-};
-
-const createUserEntity = async (prisma: PrismaClient, newUser: users) => {
-  const responseData = await prisma.users.findUnique({
-    where: {
-      id: newUser.id,
-    },
-    include: {
-      users_emails: true,
-      users_phone_numbers: true,
-    },
-  });
-
-  const userEntity = {
-    id: responseData.id,
-    email: {
-      id: responseData.users_emails.id,
-      email: responseData.users_emails.email,
-    },
-  };
-
-  if (responseData.users_phone_numbers.length !== 0) {
-    userEntity['phoneNumbers'] = responseData.users_phone_numbers.map(
-      (value) => {
-        return { id: value.id, phoneNumber: value.phone_number };
-      },
-    );
-  }
-
-  return userEntity;
 };
 
 export default createUser;
