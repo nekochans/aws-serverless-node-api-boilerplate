@@ -78,6 +78,12 @@ export const createUser = async (
             errorCode: 'emailAlreadyRegistered',
             errorMessage: 'email is already registered',
           });
+        case 'unexpectedError':
+          return createErrorResponse<ErrorCode, ErrorMessage>({
+            statusCode: HttpStatusCode.internalServerError,
+            errorCode: 'dbError',
+            errorMessage: 'error in database',
+          });
         default:
           assertNever(errorMessage);
       }
@@ -88,20 +94,6 @@ export const createUser = async (
       body: { user: createNewUserResponse.userEntity },
     });
   } catch (error) {
-    // TODO このブロックの処理は src/api/repositories/implements/prisma/user.ts に移動させる
-    // Prismaのエラーオブジェクトは下記のような仕様、これを元に判定する事は出来る
-    // https://www.prisma.io/docs/reference/api-reference/error-reference
-    if (
-      error?.code === 'P2002' &&
-      error?.meta?.target === 'uq_users_emails_02'
-    ) {
-      return createErrorResponse<ErrorCode, ErrorMessage>({
-        statusCode: HttpStatusCode.badRequest,
-        errorCode: 'emailAlreadyRegistered',
-        errorMessage: 'email is already registered',
-      });
-    }
-
     return createErrorResponse<ErrorCode, ErrorMessage>({
       statusCode: HttpStatusCode.internalServerError,
       errorCode: 'dbError',

@@ -4,6 +4,7 @@ export class CreateNewUserError extends ExtensibleCustomError {}
 
 export const CreateNewUserErrorMessage = {
   emailAlreadyRegisteredError: 'emailAlreadyRegisteredError',
+  unexpectedError: 'unexpectedError',
 } as const;
 
 export type CreateNewUserErrorMessage =

@@ -13,31 +13,52 @@ export const createNewUser: CreateNewUser<PrismaClient> = async (
   datastoreClient,
   { email, phoneNumber },
 ): Promise<CreateNewUserResponse> => {
-  const user = await datastoreClient.users_emails.findFirst({
-    where: {
-      email: email,
-    },
-  });
+  try {
+    // const user = await datastoreClient.users_emails.findFirst({
+    //   where: {
+    //     email: email,
+    //   },
+    // });
+    //
+    // if (user) {
+    //   return {
+    //     isSuccessful: false,
+    //     error: new CreateNewUserError(
+    //       CreateNewUserErrorMessage.emailAlreadyRegisteredError,
+    //     ),
+    //   };
+    // }
 
-  if (user) {
+    const newUser = await datastoreClient.users.create(
+      createUserParams({ email, phoneNumber }),
+    );
+
+    const userEntity = await createUserEntity(datastoreClient, newUser);
+
+    return {
+      isSuccessful: true,
+      userEntity: userEntity,
+    };
+  } catch (error) {
+    // Prismaのエラーオブジェクトは下記のような仕様、これを元に判定する事は出来る
+    // https://www.prisma.io/docs/reference/api-reference/error-reference
+    if (
+      error?.code === 'P2002' &&
+      error?.meta?.target === 'uq_users_emails_02'
+    ) {
+      return {
+        isSuccessful: false,
+        error: new CreateNewUserError(
+          CreateNewUserErrorMessage.emailAlreadyRegisteredError,
+        ),
+      };
+    }
+
     return {
       isSuccessful: false,
-      error: new CreateNewUserError(
-        CreateNewUserErrorMessage.emailAlreadyRegisteredError,
-      ),
+      error: new CreateNewUserError(CreateNewUserErrorMessage.unexpectedError),
     };
   }
-
-  const newUser = await datastoreClient.users.create(
-    createUserParams({ email, phoneNumber }),
-  );
-
-  const userEntity = await createUserEntity(datastoreClient, newUser);
-
-  return {
-    isSuccessful: true,
-    userEntity: userEntity,
-  };
 };
 
 const createUserParams = (createNewUserParams: CreateNewUserParams) => {
