@@ -26,8 +26,6 @@ const createUserHandler: ValidatedEventAPIGatewayProxyEvent<
 
   const response = await createUser(request, prisma);
 
-  await prisma.$disconnect();
-
   return formatJsonResponse(response.statusCode, response.body);
 };
 
