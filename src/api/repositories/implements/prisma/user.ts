@@ -14,20 +14,20 @@ export const createNewUser: CreateNewUser<PrismaClient> = async (
   { email, phoneNumber },
 ): Promise<CreateNewUserResponse> => {
   try {
-    // const user = await datastoreClient.users_emails.findFirst({
-    //   where: {
-    //     email: email,
-    //   },
-    // });
-    //
-    // if (user) {
-    //   return {
-    //     isSuccessful: false,
-    //     error: new CreateNewUserError(
-    //       CreateNewUserErrorMessage.emailAlreadyRegisteredError,
-    //     ),
-    //   };
-    // }
+    const user = await datastoreClient.users_emails.findFirst({
+      where: {
+        email: email,
+      },
+    });
+
+    if (user) {
+      return {
+        isSuccessful: false,
+        error: new CreateNewUserError(
+          CreateNewUserErrorMessage.emailAlreadyRegisteredError,
+        ),
+      };
+    }
 
     const newUser = await datastoreClient.users.create(
       createUserParams({ email, phoneNumber }),
