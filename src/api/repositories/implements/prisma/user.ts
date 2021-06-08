@@ -29,9 +29,9 @@ export const createNewUser: CreateNewUser<PrismaClient> = async (
       };
     }
 
-    const newUser = await datastoreClient.users.create(
-      createUserParams({ email, phoneNumber }),
-    );
+    const [newUser] = await datastoreClient.$transaction([
+      datastoreClient.users.create(createUserParams({ email, phoneNumber })),
+    ]);
 
     const userEntity = await createUserEntity(datastoreClient, newUser);
 
