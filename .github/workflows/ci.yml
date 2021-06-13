@@ -38,4 +38,6 @@ jobs:
           docker-compose up -d --build
           sudo yarn install
           yarn run lint
+          chmod 755 ./migrate_up.sh
+          ./migrate_up.sh
           yarn run test
