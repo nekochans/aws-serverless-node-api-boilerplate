@@ -12,6 +12,9 @@ jobs:
   build:
     name: Build And Test
     runs-on: ubuntu-latest
+    env:
+      MIGRATION_DSN: ${{ secrets.MIGRATION_DSN }}
+      MIGRATION_TEST_DSN: ${{ secrets.MIGRATION_TEST_DSN }}
     timeout-minutes: 10
     strategy:
       matrix:
