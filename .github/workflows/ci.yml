@@ -54,5 +54,5 @@ jobs:
         run: |
           yarn run lint
           docker-compose exec -T mysql service mysql status
-          docker-compose exec -T migrate /migrate/app/migrate_up_in_ci.sh
+          docker-compose exec -T migrate migrate -source file://./migrations -database $MIGRATION_DSN up
           yarn run test
