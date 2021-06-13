@@ -18,6 +18,9 @@ jobs:
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      TEST_DB_USER: ${{ secrets.TEST_DB_USER }}
+      TEST_DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
+      TEST_DB_NAME: ${{ secrets.TEST_DB_NAME }}
     timeout-minutes: 10
     strategy:
       matrix:
@@ -54,5 +57,5 @@ jobs:
         run: |
           yarn run lint
           docker-compose exec -T mysql service mysql status
-          docker-compose exec -T migrate migrate -source file://./migrations -database '$MIGRATION_DSN' up
+          docker-compose exec -T migrate make migrate-up
           yarn run test

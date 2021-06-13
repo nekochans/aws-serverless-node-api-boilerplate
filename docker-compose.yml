@@ -24,6 +24,12 @@ services:
     environment:
       MIGRATION_DSN: ${MIGRATION_DSN}
       MIGRATION_TEST_DSN: ${MIGRATION_TEST_DSN}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      TEST_DB_USER: ${TEST_DB_USER}
+      TEST_DB_PASSWORD: ${TEST_DB_PASSWORD}
+      TEST_DB_NAME: ${TEST_DB_NAME}
     volumes:
       - ./:/migrate/app
       - exclude:/migrate/app/node_modules/
