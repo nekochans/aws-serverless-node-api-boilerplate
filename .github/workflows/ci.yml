@@ -39,16 +39,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - run: |
           yarn install
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Docker set up
-        run: |
-          docker-compose up --build -d
       - name: Execute test
         run: |
           yarn run lint
-          docker-compose exec -T mysql service mysql status
           yarn run test
