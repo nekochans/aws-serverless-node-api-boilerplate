@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$1" = "" ]; then
-  echo  "第1引数にMigrationFileのタイトルを指定して下さい。"
+  echo  "Specify the 'title' of the MigrationFile as the first argument."
   echo "FYI: https://github.com/golang-migrate/migrate/blob/master/MIGRATIONS.md"
   exit 1
 fi
