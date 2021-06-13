@@ -52,5 +52,6 @@ jobs:
       - name: Execute test
         run: |
           yarn run lint
-          yarn run test
           docker-compose exec -T mysql service mysql status
+          docker-compose exec -T migrate migrate -source file://./migrations -database ${MIGRATION_TEST_DSN} up
+          yarn run test

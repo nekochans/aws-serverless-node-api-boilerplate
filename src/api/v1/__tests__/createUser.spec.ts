@@ -9,7 +9,7 @@ import {
 } from '../../response';
 import { HttpStatusCode } from '@constants/httpStatusCode';
 
-describe.skip('createUser', () => {
+describe('createUser', () => {
   let prisma: PrismaClient;
 
   beforeEach(async () => {
