@@ -21,6 +21,9 @@ services:
       dockerfile: docker/migrate/Dockerfile
     restart: always
     command: 'tail -f /dev/null'
+    environment:
+      MIGRATION_DSN: ${MIGRATION_DSN}
+      MIGRATION_TEST_DSN: ${MIGRATION_TEST_DSN}
     volumes:
       - ./:/go/app
       - exclude:/go/app/node_modules/
