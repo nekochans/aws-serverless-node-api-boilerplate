@@ -22,8 +22,8 @@ services:
     restart: always
     command: 'tail -f /dev/null'
     volumes:
-      - ./:/migrate/app
-      - exclude:/migrate/app/node_modules/
+      - ./:/go/app
+      - exclude:/go/app/node_modules/
 volumes:
   nekochans-serverless-api-mysql:
   exclude:

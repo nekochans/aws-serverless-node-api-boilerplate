@@ -1,9 +1,7 @@
-FROM ubuntu:20.04
+FROM migrate/migrate:v4.14.1
 
-WORKDIR /migrate/app
+WORKDIR /go/app
 
-RUN set -eux
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y curl gnupg2 vim
-RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.14.1/migrate.linux-amd64.tar.gz | tar xvz
-RUN mv ./migrate.linux-amd64 /usr/bin/migrate
+ENTRYPOINT []
+
+CMD tail -f /dev/null
