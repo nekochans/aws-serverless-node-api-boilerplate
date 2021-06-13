@@ -36,6 +36,6 @@ jobs:
             ${{ runner.os }}-yarn-
       - run: |
           docker-compose up -d --build
-          yarn install
+          sudo yarn install
           yarn run lint
           yarn run test
