@@ -41,6 +41,5 @@ jobs:
           docker-compose up --build -d
           sudo yarn install
           yarn run lint
-          chmod 755 ./migrate_up.sh
-          ./migrate_up.sh
+          docker-compose exec -T migrate migrate -source file://./migrations -database ${MIGRATION_TEST_DSN} up
           yarn run test
