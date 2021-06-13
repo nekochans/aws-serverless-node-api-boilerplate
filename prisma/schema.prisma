@@ -8,6 +8,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model schema_migrations {
+  version BigInt  @id
+  dirty   Boolean
+}
+
 model users {
   id                  Int                   @id @default(autoincrement()) @db.UnsignedInt
   lock_version        Int                   @default(0) @db.UnsignedInt

@@ -15,5 +15,16 @@ services:
     volumes:
       - nekochans-serverless-api-mysql:/var/lib/mysql
       - ./docker/mysql:/docker-entrypoint-initdb.d
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/migrate/Dockerfile
+    restart: always
+    command: 'tail -f /dev/null'
+    volumes:
+      - ./:/migrate/app
+      - exclude:/migrate/app/node_modules/
 volumes:
   nekochans-serverless-api-mysql:
+  exclude:
+    driver: 'local'
