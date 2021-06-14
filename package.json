@@ -13,7 +13,7 @@
     "fix:eslint": "eslint --fix 'src/**/*.{js,ts}'",
     "lint": "yarn run lint:prettier && yarn run lint:eslint",
     "format": "yarn run fix:prettier && yarn run fix:eslint",
-    "test": "DATABASE_URL=$TEST_DATABASE_URL jest",
+    "test": "DATABASE_URL=\"mysql://serverless_test_user:Serverless_Test_User|8888@127.0.0.1:63306/serverless_test\" jest",
     "prisma:introspect": "prisma introspect --force",
     "prisma:generate": "prisma generate"
   },
