@@ -4,6 +4,8 @@ LABEL maintainer="https://github.com/nekochans"
 
 WORKDIR /opt/app
 
+COPY . .
+
 RUN set -eux && \
   apk update && \
   apk add --no-cache make
