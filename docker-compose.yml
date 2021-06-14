@@ -22,8 +22,6 @@ services:
     restart: always
     command: 'tail -f /dev/null'
     environment:
-      MIGRATION_DSN: ${MIGRATION_DSN}
-      MIGRATION_TEST_DSN: ${MIGRATION_TEST_DSN}
       DB_USERNAME: ${DB_USERNAME}
       DB_NAME: ${DB_NAME}
       DB_PASSWORD: ${DB_PASSWORD}

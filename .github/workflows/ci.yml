@@ -13,8 +13,6 @@ jobs:
     name: Build And Test
     runs-on: ubuntu-latest
     env:
-      MIGRATION_DSN: ${{ secrets.MIGRATION_DSN }}
-      MIGRATION_TEST_DSN: ${{ secrets.MIGRATION_TEST_DSN }}
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
