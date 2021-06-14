@@ -58,4 +58,4 @@ jobs:
           yarn run lint
           docker-compose exec -T mysql service mysql status
           docker-compose exec -T migrate make migrate-up-test-db
-          DATABASE_URL=$TEST_DATABASE_URL yarn run test
+          yarn run test
