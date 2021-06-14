@@ -30,8 +30,8 @@ services:
       TEST_DB_PASSWORD: ${TEST_DB_PASSWORD}
       TEST_DB_NAME: ${TEST_DB_NAME}
     volumes:
-      - ./:/migrate/app
-      - exclude:/migrate/app/node_modules/
+      - ./:/opt/app
+      - exclude:/opt/app/node_modules/
 volumes:
   nekochans-serverless-api-mysql:
   exclude:
