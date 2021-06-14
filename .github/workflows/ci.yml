@@ -58,5 +58,5 @@ jobs:
         run: |
           yarn run lint
           docker-compose exec -T mysql service mysql status
-          docker-compose exec -T migrate make migrate-up
+          docker-compose exec -T migrate make migrate-up-test-db
           yarn run test
