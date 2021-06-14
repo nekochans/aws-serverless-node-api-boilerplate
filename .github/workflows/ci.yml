@@ -18,6 +18,7 @@ jobs:
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      TEST_DB_HOST: ${{ secrets.TEST_DB_HOST }}
       TEST_DB_USER: ${{ secrets.TEST_DB_USER }}
       TEST_DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
       TEST_DB_NAME: ${{ secrets.TEST_DB_NAME }}
