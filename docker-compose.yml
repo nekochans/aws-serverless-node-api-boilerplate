@@ -21,9 +21,17 @@ services:
       dockerfile: docker/migrate/Dockerfile
     restart: always
     command: 'tail -f /dev/null'
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      TEST_DB_HOST: ${TEST_DB_HOST}
+      TEST_DB_USER: ${TEST_DB_USER}
+      TEST_DB_PASSWORD: ${TEST_DB_PASSWORD}
+      TEST_DB_NAME: ${TEST_DB_NAME}
     volumes:
-      - ./:/migrate/app
-      - exclude:/migrate/app/node_modules/
+      - ./:/opt/app
+      - exclude:/opt/app/node_modules/
 volumes:
   nekochans-serverless-api-mysql:
   exclude:
