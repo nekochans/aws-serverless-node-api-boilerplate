@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      Golang: 1.15
+      golang: 1.15
   pre_build:
     commands:
-      - echo $DB_HOST
+      - echo ${DB_HOST}
