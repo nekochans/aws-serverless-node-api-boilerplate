@@ -11,3 +11,9 @@ phases:
       - apt-get install -y curl gnupg2
       - curl -L https://github.com/golang-migrate/migrate/releases/download/v4.14.1/migrate.linux-amd64.tar.gz | tar xvz
       - mv ./migrate.linux-amd64 /usr/bin/migrate
+  build:
+    commands:
+      - make migrate-up
+  post_build:
+    commands:
+      - echo Migration completed on `date`
