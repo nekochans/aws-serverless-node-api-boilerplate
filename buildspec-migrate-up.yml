@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      golang: 1.15
+  pre_build:
+    commands:
+      - echo Install migrate
+      - apt-get update && apt-get upgrade -y
+      - apt-get install -y curl gnupg2
+      - curl -L https://github.com/golang-migrate/migrate/releases/download/v4.14.1/migrate.linux-amd64.tar.gz | tar xvz
+      - mv ./migrate.linux-amd64 /usr/bin/migrate
+  build:
+    commands:
+      - make migrate-up
+  post_build:
+    commands:
+      - echo Migration up completed on `date`
