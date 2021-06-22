@@ -16,4 +16,4 @@ phases:
       - make migrate-up
   post_build:
     commands:
-      - echo Migration completed on `date`
+      - echo Migration up completed on `date`
