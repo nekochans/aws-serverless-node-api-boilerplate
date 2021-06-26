@@ -67,6 +67,43 @@ export SUBNET_ID_3=Lambda関数に設定するサブネットIDの3つ目を設�
 
 Migrationのロールバックを行う際は `./migrate_down.sh` を実行します。
 
-## 設計方針
+## APIを追加する具体的な手順
 
-TODO
+多少、型定義のカスタマイズを行っていますが、基本的には [Serverlessの公式テンプレート](https://github.com/serverless/serverless/tree/master/lib/plugins/create/templates/aws-nodejs-typescript) がベースになっています。
+
+### `functions/[API名]/handler.ts` の作成
+
+`src/functions/` にAPI名のディレクトリを作成します。
+
+API名はキャメルケースで命名します。
+
+`src/functions/[API名]/handler.ts` という名前のファイルを作成します。
+
+この中に `[API名]Handler` という命名規則で関数を定義します。
+
+ここがLambda関数のエントリーポイントになります。
+
+### `functions/○○/index.ts` の作成
+
+`functions/[API名]/index.ts` を作成します。
+
+handler関数の定義や、Lambda関数のevents定義を記載します。
+
+`src/functions/createUser/index.ts` 等の既存ファイルを参照して下さい。
+
+### `src/functions/[API名]/` にリクエストパラメータ用のファイルを作成
+
+APIのパラメータの受け取り方に応じて、以下のファイルを作成します。
+
+| 作成するファイル名 | 説明                                                                      |
+|--------------------|---------------------------------------------------------------------------|
+| requestHeader.ts   | 独自のHTTPHeaderを受け取る場合はこのファイルを作成し型定義をします。      |
+| requestBody.ts     | リクエストBodyを受け取る場合はこのファイルを作成し型定義をします。        |
+| pathParams.ts      | URLのパスでパラメータを受け取る場合はこのファイルを作成し型定義をします。 |
+| queryParams.ts     | クエリパラメータを受け取る場合はこのファイルを作成し型定義をします。      |
+
+1つのAPIがHTTPHeader、リクエストBody、パスパラメータ、クエリパラメータの全てを受け取るケースは少ないと思います。
+
+その場合は `src/constants/default○○.ts` を利用して下さい。
+
+これらの型定義を行う事でLambdaのeventオブジェクトから型安全を確保しつつ、各パラメータを取り出す事が可能になります。
