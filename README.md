@@ -214,3 +214,18 @@ created ./migrations/20210627224719_add_column_to_users_status.up.sql
 その後で `prisma:generate` を実行してPrisma Clientを再構築します。
 
 これでPrismaで新しいテーブルにアクセスが可能になります。
+
+### AWS上でのMigrationについて
+
+AWSのCodeBuildで行っています。
+
+以下がCodeBuildの設定ファイルです。
+
+- `buildspec-migrate-up.yml`
+- `buildspec-migrate-down.yml`
+
+## デプロイについて
+
+GitHub Actionsで自動でデプロイが行われます。
+
+このプロジェクトはboilerplateなので単一環境にしかデプロイを行っていませんが、ワークフローと環境変数を追加する事で複数の環境へのデプロイが可能です。
