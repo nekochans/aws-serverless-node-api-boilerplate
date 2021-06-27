@@ -107,3 +107,68 @@ APIのパラメータの受け取り方に応じて、以下のファイルを�
 その場合は `src/constants/default○○.ts` を利用して下さい。
 
 これらの型定義を行う事でLambdaのeventオブジェクトから型安全を確保しつつ、各パラメータを取り出す事が可能になります。
+
+### `src/api/v1/[API名].ts` にAPIの関数を作成する
+
+ここで作成する関数が最も重要です。
+
+作り方に大きな制約はありませんが、いくつかルールを設けてあります。
+
+ちなみに `v1` とバージョンが定義されていますが `v2` にバージョンアップする際はAPIの破壊的な変更があった際に限ります。
+
+`v1.1` のような細かいバージョン定義は考慮されていません。
+
+#### 1. `src/functions/[API名]/handler.ts` にロジックが入り込まないように必要な情報を全て返す事
+
+HTTPステータスコードやレスポンスBody、レスポンスヘッダー等の必要な情報を全て返して下さい。
+
+handler関数内（`src/functions/[API名]/handler.ts`） ではこの関数のレスポンスを返すだけという状態にする為です。
+
+その為、例外が発生した際も、例外を `Promise.reject()` で返すのではなく、どのようなエラーが発生したかの情報をまとめて、 `Promise.resolve` でレスポンスを返すようにします。
+
+必要に応じて `src/api/domain/` に任意のファイルを作成して下さい。
+
+どのような物を `src/api/domain/` に入れるかのルールはありませんが、複数のAPIで利用するビジネスロジック上重要な型定義等が `src/api/domain/` に実装されていく事になります。
+
+#### 2. バリデーションエラーの発生時は専用のレスポンスを返す
+
+HTTPステータスコードは `422` で以下のようにバリデーションエラーになったキー名が分かるようにエラーを返します。
+
+```json
+{
+  "message": "Unprocessable Entity",
+  "validationErrors": [
+    {
+      "key": "name",
+      "reason": "must NOT have more than 8 characters"
+    },
+    {
+      "key": "status",
+      "reason": "must be <= 1"
+    }
+  ]
+}
+```
+
+これを実現する為には `src/api/validate.ts` を利用します。
+
+仕組みを簡単に説明すると、JSON Schemaの仕組みを利用してバリデーションを行っています。
+
+JSON Schemaの定義は `src/functions/[API名]` 配下でも利用するので `src/api/domain/types/schemas/` に定義して下さい。
+
+#### 3. DBや外部APIに接続する場合はRepositoryパターンを利用する
+
+これらのケースに該当する場合は直接関数を定義しないで、 `src/api/repositories/interfaces/` に関数の型定義を行います。
+
+この型定義を利用して、 `src/api/repositories/implements/○○/` に型定義を満たす関数を実装します。
+
+`○○` の部分には依存している外部ライブラリ名が入ります。
+
+例えば以下のような形です。
+
+- [axios](https://github.com/axios/axios) を使って外部APIに通信する場合は `src/api/repositories/implements/axios/` に定義
+- [prisma](https://www.prisma.io/) を使ってDBに接続する場合は `src/api/repositories/implements/prisma/` に定義
+
+`○○` の部分に依存している外部ライブラリ名を入れる理由は他のライブラリに乗り換えた際の工数を最小限に抑える為です。
+
+Repositoryパターンを利用した関数を利用する側は必ず `implements` ではなく `interfaces` に依存するように実装する事が大切になってきます。
