@@ -67,6 +67,10 @@ export SUBNET_ID_3=Lambda関数に設定するサブネットIDの3つ目を設�
 
 Migrationのロールバックを行う際は `./migrate_down.sh` を実行します。
 
+### Prisma Clientの生成
+
+`yarn run prisma:generate` を実行します。
+
 ## APIを追加する具体的な手順
 
 多少、型定義のカスタマイズを行っていますが、基本的には [Serverlessの公式テンプレート](https://github.com/serverless/serverless/tree/master/lib/plugins/create/templates/aws-nodejs-typescript) がベースになっています。
@@ -172,3 +176,41 @@ JSON Schemaの定義は `src/functions/[API名]` 配下でも利用するので 
 `○○` の部分に依存している外部ライブラリ名を入れる理由は他のライブラリに乗り換えた際の工数を最小限に抑える為です。
 
 Repositoryパターンを利用した関数を利用する側は必ず `implements` ではなく `interfaces` に依存するように実装する事が大切になってきます。
+
+## Migrationの追加手順
+
+### 1. Migrationファイルの追加
+
+DB用のライブラリとして [Prisma](https://www.prisma.io/) を利用しています、このライブラリにはMigration機能が実装されています。
+
+しかし本プロジェクトではMigrationをツールは [migrate](https://github.com/golang-migrate/migrate) を利用します。
+
+`create_new_migration_file.sh` を利用すると、空のMigrationファイルを作成出来ますので、そこにSQLを書いていきます。
+
+`create_new_migration_file.sh` に渡す引数ですが、命名規則は以下のような形になっています。
+
+- `create_[テーブル名]`
+- `add_column_[追加するカラム名]`
+- `add_index_[追加するカラム名]`
+
+実行例は以下の通りです。
+
+```bash
+./create_new_migration_file.sh add_column_to_users_status
+
+# これらのファイルが作成される
+created ./migrations/20210627224719_add_column_to_users_status.up.sql
+created ./migrations/20210627224719_add_column_to_users_status.up.sql
+```
+
+### 2. Migrationの実行を行う
+
+`./migrate_up.sh` を実行してMigrationを実行します。
+
+### 3. Prisma Clientの再構築
+
+`yarn run prisma:introspect` を実行して `prisma/schema.prisma` に新しいテーブル構造を取り込みます。
+
+その後で `prisma:generate` を実行してPrisma Clientを再構築します。
+
+これでPrismaで新しいテーブルにアクセスが可能になります。
