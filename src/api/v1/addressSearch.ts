@@ -17,6 +17,7 @@ import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
 import { AddressSchema } from '../domain/types/schemas/addressSchema';
 import { DefaultApiRequest } from '../request';
+import { RequestSchema } from '../domain/types/schemas/requestSchema';
 
 type Request = DefaultApiRequest & {
   postalCode: string;
@@ -45,6 +46,7 @@ const schema = {
   type: 'object',
   properties: {
     postalCode: AddressSchema.postalCode,
+    'x-request-id': RequestSchema['x-request-id'],
   },
   required: ['postalCode'],
   additionalProperties: false,

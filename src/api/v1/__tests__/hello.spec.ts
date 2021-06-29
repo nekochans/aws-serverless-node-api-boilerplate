@@ -63,6 +63,7 @@ describe('hello', () => {
 
   it('should return a validation error', () => {
     const request = {
+      'x-request-id': 'aaaaaaaa-bbbbbbbbb-123-dddddddddddd',
       name: 'MokoCatMokoCat',
       status: 10,
     };
@@ -74,6 +75,10 @@ describe('hello', () => {
         validationErrors: [
           { key: 'name', reason: 'must NOT have more than 8 characters' },
           { key: 'status', reason: 'must be <= 1' },
+          {
+            key: 'x-request-id',
+            reason: 'must NOT have fewer than 36 characters',
+          },
         ],
       },
       headers: {

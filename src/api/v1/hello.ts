@@ -11,6 +11,7 @@ import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
 import { HelloSchema } from '../domain/types/schemas/helloSchema';
 import { DefaultApiRequest } from '../request';
+import { RequestSchema } from '../domain/types/schemas/requestSchema';
 
 type Request = DefaultApiRequest & {
   name: string;
@@ -37,6 +38,7 @@ const schema = {
   properties: {
     name: HelloSchema.name,
     status: HelloSchema.status,
+    'x-request-id': RequestSchema['x-request-id'],
   },
   required: ['name', 'status'],
   additionalProperties: false,

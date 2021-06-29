@@ -18,6 +18,7 @@ import { createNewUser } from '../repositories/implements/prisma/user';
 import { CreateNewUserErrorMessage } from '../repositories/errors/createNewUserError';
 import assertNever from '../utils/assertNever';
 import { DefaultApiRequest } from '../request';
+import { RequestSchema } from '../domain/types/schemas/requestSchema';
 
 type Request = DefaultApiRequest & {
   email: string;
@@ -45,6 +46,7 @@ const schema = {
   properties: {
     email: UserSchema.email,
     phoneNumber: UserSchema.phoneNumber,
+    'x-request-id': RequestSchema['x-request-id'],
   },
   required: ['email'],
   additionalProperties: false,

@@ -127,6 +127,7 @@ describe('createUser', () => {
 
   it('should return a validation error', async () => {
     const request = {
+      'x-request-id': 'aaaaaaaa-bbbbbbbbb-123-dddddddddddd',
       email: '12345678',
     };
 
@@ -136,6 +137,10 @@ describe('createUser', () => {
         message: validationErrorResponseMessage(),
         validationErrors: [
           { key: 'email', reason: 'must match format "email"' },
+          {
+            key: 'x-request-id',
+            reason: 'must NOT have fewer than 36 characters',
+          },
         ],
       },
       headers: {

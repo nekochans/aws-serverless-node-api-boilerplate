@@ -133,6 +133,7 @@ describe('addressSearch', () => {
 
   it('should return a validation error', async () => {
     const request = {
+      'x-request-id': 'aaaaaaaa-bbbbbbbbb-123-dddddddddddd',
       postalCode: '12345678',
     };
 
@@ -142,6 +143,10 @@ describe('addressSearch', () => {
         message: validationErrorResponseMessage(),
         validationErrors: [
           { key: 'postalCode', reason: 'must NOT have more than 7 characters' },
+          {
+            key: 'x-request-id',
+            reason: 'must NOT have fewer than 36 characters',
+          },
         ],
       },
       headers: {

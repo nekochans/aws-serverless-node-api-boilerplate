@@ -64,6 +64,7 @@ describe('helloWithPath', () => {
 
   it('should return a validation error', () => {
     const request = {
+      'x-request-id': 'aaaaaaaa-bbbbbbbbb-123-dddddddddddd',
       helloId: 'MokoCatMokoCat',
     };
 
@@ -73,6 +74,10 @@ describe('helloWithPath', () => {
         message: validationErrorResponseMessage(),
         validationErrors: [
           { key: 'helloId', reason: 'must NOT have more than 8 characters' },
+          {
+            key: 'x-request-id',
+            reason: 'must NOT have fewer than 36 characters',
+          },
         ],
       },
       headers: {
