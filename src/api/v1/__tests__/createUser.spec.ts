@@ -8,11 +8,20 @@ import {
   validationErrorResponseMessage,
 } from '../../response';
 import { HttpStatusCode } from '@constants/httpStatusCode';
+import * as response from '../../response';
 
 describe('createUser', () => {
   let prisma: PrismaClient;
+  let responseSpy;
+  const fakeRequestId = 'aaaaaaaa-bbbbbbbbb-123-ddddddddddddd';
 
   beforeEach(async () => {
+    responseSpy = jest
+      .spyOn(response, 'createDefaultResponseHeaders')
+      .mockReturnValue({
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
+      });
     prisma = new PrismaClient();
 
     try {
@@ -27,6 +36,10 @@ describe('createUser', () => {
     } finally {
       await prisma.$disconnect();
     }
+  });
+
+  afterEach(() => {
+    responseSpy.mockRestore();
   });
 
   it('will create a new user, Only the required parameters are specified', async () => {
@@ -45,11 +58,16 @@ describe('createUser', () => {
           },
         },
       },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
+      },
     };
 
     const actual = await createUser(request, prisma);
 
     expect(actual).toStrictEqual(expected);
+    expect(responseSpy).toHaveBeenCalled();
   });
 
   it('will create a new user, specifying all parameters', async () => {
@@ -70,11 +88,16 @@ describe('createUser', () => {
           phoneNumbers: [{ id: 1, phoneNumber: request.phoneNumber }],
         },
       },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
+      },
     };
 
     const actual = await createUser(request, prisma);
 
     expect(actual).toStrictEqual(expected);
+    expect(responseSpy).toHaveBeenCalled();
   });
 
   it('should return a email already registered error', async () => {
@@ -88,6 +111,10 @@ describe('createUser', () => {
         code: 'emailAlreadyRegistered',
         message: `email is already registered`,
       },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
+      },
     };
 
     await createUser(request, prisma);
@@ -95,10 +122,12 @@ describe('createUser', () => {
     const actual = await createUser(request, prisma);
 
     expect(actual).toStrictEqual(expected);
+    expect(responseSpy).toHaveBeenCalled();
   });
 
   it('should return a validation error', async () => {
     const request = {
+      'x-request-id': 'aaaaaaaa-bbbbbbbbb-123-dddddddddddd',
       email: '12345678',
     };
 
@@ -108,12 +137,21 @@ describe('createUser', () => {
         message: validationErrorResponseMessage(),
         validationErrors: [
           { key: 'email', reason: 'must match format "email"' },
+          {
+            key: 'x-request-id',
+            reason: 'must NOT have fewer than 36 characters',
+          },
         ],
+      },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
       },
     };
 
     const actual = await createUser(request, prisma);
 
     expect(actual).toStrictEqual(expected);
+    expect(responseSpy).toHaveBeenCalled();
   });
 });

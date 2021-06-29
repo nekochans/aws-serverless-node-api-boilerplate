@@ -4,13 +4,16 @@ import {
   ValidationErrorResponse,
   createSuccessResponse,
   createErrorResponse,
+  createDefaultResponseHeaders,
 } from '../response';
 import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
 import { HelloSchema } from '../domain/types/schemas/helloSchema';
+import { DefaultApiRequest } from '../request';
+import { RequestSchema } from '../domain/types/schemas/requestSchema';
 
-type Request = {
+export type Request = DefaultApiRequest & {
   helloId: string;
 };
 
@@ -33,6 +36,7 @@ const schema = {
   type: 'object',
   properties: {
     helloId: HelloSchema.helloId,
+    'x-request-id': RequestSchema['x-request-id'],
   },
   required: ['helloId'],
   additionalProperties: false,
@@ -57,6 +61,7 @@ export const helloWithPath = (
       statusCode: HttpStatusCode.badRequest,
       errorCode: 'notAllowedHelloId',
       errorMessage: 'helloId is not allowed',
+      headers: createDefaultResponseHeaders(request['x-request-id']),
     });
   }
 
@@ -65,6 +70,7 @@ export const helloWithPath = (
     body: {
       message: `HelloWithPath ${request.helloId}, welcome to the exciting Serverless world!`,
     },
+    headers: createDefaultResponseHeaders(request['x-request-id']),
   });
 };
 

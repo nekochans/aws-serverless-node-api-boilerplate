@@ -9,7 +9,8 @@ import defaultRequestBody from '@constants/defaultRequestBody';
 
 import pathParams from './pathParams';
 import queryParams from './queryParams';
-import helloWithPath from '../../api/v1/helloWithPath';
+import helloWithPath, { Request } from '../../api/v1/helloWithPath';
+import { createApiRequest } from '../../api/request';
 
 const helloWithPathHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultRequestHeader,
@@ -17,11 +18,18 @@ const helloWithPathHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof pathParams,
   typeof queryParams
 > = async (event) => {
-  const request = event.pathParameters;
+  const request = createApiRequest<Request>(
+    event.headers,
+    event.pathParameters,
+  );
 
   const response = helloWithPath(request);
 
-  return formatJsonResponse(response.statusCode, response.body);
+  return formatJsonResponse(
+    response.statusCode,
+    response.body,
+    response.headers,
+  );
 };
 
 export const main = middyfy(helloWithPathHandler);

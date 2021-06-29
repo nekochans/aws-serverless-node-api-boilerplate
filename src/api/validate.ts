@@ -2,6 +2,7 @@ import { Schema } from 'ajv/lib/types/index';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import {
+  createDefaultResponseHeaders,
   ValidationErrorResponse,
   validationErrorResponseMessage,
 } from './response';
@@ -26,12 +27,20 @@ const validate = <T>(schema: Schema, params: T): ValidateResult => {
       };
     });
 
+    const responseHeaders = Object.prototype.hasOwnProperty.call(
+      params,
+      'x-request-id',
+    )
+      ? createDefaultResponseHeaders(params['x-request-id'])
+      : createDefaultResponseHeaders();
+
     const validationErrorResponse = {
       statusCode: HttpStatusCode.unprocessableEntity,
       body: {
         message: validationErrorResponseMessage(),
         validationErrors,
       },
+      headers: responseHeaders,
     };
 
     return { isError: true, validationErrorResponse };

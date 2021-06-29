@@ -6,6 +6,7 @@ import {
   ValidationErrorResponse,
   createSuccessResponse,
   createErrorResponse,
+  createDefaultResponseHeaders,
 } from '../response';
 
 import { UserEntity } from '../domain/types/userEntity';
@@ -16,8 +17,10 @@ import { UserSchema } from '../domain/types/schemas/userSchema';
 import { createNewUser } from '../repositories/implements/prisma/user';
 import { CreateNewUserErrorMessage } from '../repositories/errors/createNewUserError';
 import assertNever from '../utils/assertNever';
+import { DefaultApiRequest } from '../request';
+import { RequestSchema } from '../domain/types/schemas/requestSchema';
 
-type Request = {
+export type Request = DefaultApiRequest & {
   email: string;
   phoneNumber?: string;
 };
@@ -43,6 +46,7 @@ const schema = {
   properties: {
     email: UserSchema.email,
     phoneNumber: UserSchema.phoneNumber,
+    'x-request-id': RequestSchema['x-request-id'],
   },
   required: ['email'],
   additionalProperties: false,
@@ -77,12 +81,14 @@ export const createUser = async (
             statusCode: HttpStatusCode.badRequest,
             errorCode: 'emailAlreadyRegistered',
             errorMessage: 'email is already registered',
+            headers: createDefaultResponseHeaders(request['x-request-id']),
           });
         case 'unexpectedError':
           return createErrorResponse<ErrorCode, ErrorMessage>({
             statusCode: HttpStatusCode.internalServerError,
             errorCode: 'dbError',
             errorMessage: 'error in database',
+            headers: createDefaultResponseHeaders(request['x-request-id']),
           });
         default:
           assertNever(errorMessage);
@@ -92,12 +98,14 @@ export const createUser = async (
     return createSuccessResponse<ResponseBody>({
       statusCode: HttpStatusCode.created,
       body: { user: createNewUserResponse.userEntity },
+      headers: createDefaultResponseHeaders(request['x-request-id']),
     });
   } catch (error) {
     return createErrorResponse<ErrorCode, ErrorMessage>({
       statusCode: HttpStatusCode.internalServerError,
       errorCode: 'dbError',
       errorMessage: 'error in database',
+      headers: createDefaultResponseHeaders(request['x-request-id']),
     });
   } finally {
     await prisma.$disconnect();

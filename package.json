@@ -28,13 +28,15 @@
     "ajv-formats": "^2.1.0",
     "axios": "^0.21.1",
     "extensible-custom-error": "^0.0.7",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@serverless/typescript": "^2.38.0",
     "@types/aws-lambda": "^8.10.76",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.0.1",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "axios-mock-adapter": "^1.19.0",

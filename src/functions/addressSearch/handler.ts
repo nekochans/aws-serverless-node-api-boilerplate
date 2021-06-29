@@ -11,7 +11,8 @@ import defaultQueryParams from '@constants/defaultQueryParams';
 import pathParams from './pathParams';
 
 import { fetchAddressByPostalCode } from '../../api/repositories/implements/axios/address';
-import addressSearch from '../../api/v1/addressSearch';
+import addressSearch, { Request } from '../../api/v1/addressSearch';
+import { createApiRequest } from '../../api/request';
 
 const addressSearchHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultRequestHeader,
@@ -19,11 +20,18 @@ const addressSearchHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof pathParams,
   typeof defaultQueryParams
 > = async (event) => {
-  const request = event.pathParameters;
+  const request = createApiRequest<Request>(
+    event.headers,
+    event.pathParameters,
+  );
 
   const response = await addressSearch(request, fetchAddressByPostalCode);
 
-  return formatJsonResponse(response.statusCode, response.body);
+  return formatJsonResponse(
+    response.statusCode,
+    response.body,
+    response.headers,
+  );
 };
 
 export const main = middyfy(addressSearchHandler);
