@@ -3,7 +3,6 @@ import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import {
   createDefaultResponseHeaders,
-  ResponseHeaders,
   ValidationErrorResponse,
   validationErrorResponseMessage,
 } from './response';
@@ -14,11 +13,7 @@ type ValidateResult = {
   validationErrorResponse?: ValidationErrorResponse;
 };
 
-const validate = <T>(
-  schema: Schema,
-  params: T,
-  responseHeaders: ResponseHeaders = createDefaultResponseHeaders(),
-): ValidateResult => {
+const validate = <T>(schema: Schema, params: T): ValidateResult => {
   const ajv = new Ajv({ allErrors: true });
   addFormats(ajv);
 
@@ -31,6 +26,13 @@ const validate = <T>(
         reason: value.message,
       };
     });
+
+    const responseHeaders = Object.prototype.hasOwnProperty.call(
+      params,
+      'x-request-id',
+    )
+      ? createDefaultResponseHeaders(params['x-request-id'])
+      : createDefaultResponseHeaders();
 
     const validationErrorResponse = {
       statusCode: HttpStatusCode.unprocessableEntity,
