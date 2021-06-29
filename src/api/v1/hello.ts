@@ -4,13 +4,15 @@ import {
   ValidationErrorResponse,
   createSuccessResponse,
   createErrorResponse,
+  createDefaultResponseHeaders,
 } from '../response';
 import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
 import { HelloSchema } from '../domain/types/schemas/helloSchema';
+import { DefaultApiRequest } from '../request';
 
-type Request = {
+type Request = DefaultApiRequest & {
   name: string;
   status: number;
 };
@@ -56,6 +58,7 @@ export const hello = (
       statusCode: HttpStatusCode.badRequest,
       errorCode: 'notAllowedMessage',
       errorMessage: 'message is not allowed',
+      headers: createDefaultResponseHeaders(request['x-request-id']),
     });
   }
 
@@ -64,6 +67,7 @@ export const hello = (
     body: {
       message: `Hello ${request.name}, welcome to the exciting Serverless world! Your Status is ${request.status}!`,
     },
+    headers: createDefaultResponseHeaders(request['x-request-id']),
   });
 };
 

@@ -20,7 +20,11 @@ const helloHandler: ValidatedEventAPIGatewayProxyEvent<
 
   const response = hello(request);
 
-  return formatJsonResponse(response.statusCode, response.body);
+  return formatJsonResponse(
+    response.statusCode,
+    response.body,
+    response.headers,
+  );
 };
 
 export const main = middyfy(helloHandler);

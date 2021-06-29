@@ -4,6 +4,7 @@ import {
   ValidationErrorResponse,
   createSuccessResponse,
   createErrorResponse,
+  createDefaultResponseHeaders,
 } from '../response';
 import { FetchAddressByPostalCode } from '../repositories/interfaces/address';
 import {
@@ -15,8 +16,9 @@ import { HttpStatusCode } from '@constants/httpStatusCode';
 import { valueOf } from '../utils/valueOf';
 import validate from '../validate';
 import { AddressSchema } from '../domain/types/schemas/addressSchema';
+import { DefaultApiRequest } from '../request';
 
-type Request = {
+type Request = DefaultApiRequest & {
   postalCode: string;
 };
 
@@ -70,6 +72,7 @@ export const addressSearch = async (
         statusCode: HttpStatusCode.badRequest,
         errorCode: 'notAllowedPostalCode',
         errorMessage: 'not allowed to search by that postalCode',
+        headers: createDefaultResponseHeaders(request['x-request-id']),
       });
     }
 
@@ -78,14 +81,16 @@ export const addressSearch = async (
     return createSuccessResponse<ResponseBody>({
       statusCode: HttpStatusCode.ok,
       body: address,
+      headers: createDefaultResponseHeaders(request['x-request-id']),
     });
   } catch (error) {
-    return createAddressSearchErrorResponse(error);
+    return createAddressSearchErrorResponse(error, request);
   }
 };
 
 const createAddressSearchErrorResponse = (
   error: FetchAddressByPostalCodeError,
+  request: Request,
 ): AddressSearchErrorResponse => {
   const errorMessage = error.message as FetchAddressByPostalCodeErrorMessage;
 
@@ -95,12 +100,14 @@ const createAddressSearchErrorResponse = (
         statusCode: HttpStatusCode.notFound,
         errorCode: 'notFoundAddress',
         errorMessage: 'address is not found',
+        headers: createDefaultResponseHeaders(request['x-request-id']),
       });
     case 'unexpectedError':
       return createErrorResponse<ErrorCode, ErrorMessage>({
         statusCode: HttpStatusCode.internalServerError,
         errorCode: 'unexpectedError',
         errorMessage: 'unexpected error',
+        headers: createDefaultResponseHeaders(request['x-request-id']),
       });
     default:
       return assertNever(errorMessage);

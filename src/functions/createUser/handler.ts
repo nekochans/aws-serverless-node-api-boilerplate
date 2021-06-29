@@ -26,7 +26,11 @@ const createUserHandler: ValidatedEventAPIGatewayProxyEvent<
 
   const response = await createUser(request, prisma);
 
-  return formatJsonResponse(response.statusCode, response.body);
+  return formatJsonResponse(
+    response.statusCode,
+    response.body,
+    response.headers,
+  );
 };
 
 export const main = middyfy(createUserHandler);

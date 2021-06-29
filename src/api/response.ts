@@ -1,17 +1,39 @@
 import { HttpStatusCode } from '@constants/httpStatusCode';
+import { v4 as uuidv4 } from 'uuid';
+
+export type ResponseHeaders = {
+  [header: string]: boolean | number | string;
+};
+
+export type DefaultResponseHeaders = {
+  'content-type': 'application/json';
+  'x-request-id': string;
+};
+
+export const createDefaultResponseHeaders = (
+  requestId?: string,
+): DefaultResponseHeaders => {
+  return {
+    'content-type': 'application/json',
+    'x-request-id': requestId ? requestId : uuidv4(),
+  };
+};
 
 export type SuccessResponse<T> = {
   statusCode: HttpStatusCode;
   body: T;
+  headers: ResponseHeaders;
 };
 
 export const createSuccessResponse = <T>(params: {
   statusCode: HttpStatusCode;
   body: T;
+  headers: ResponseHeaders;
 }): SuccessResponse<T> => {
   return {
     statusCode: params.statusCode,
     body: params.body,
+    headers: params.headers,
   };
 };
 
@@ -21,12 +43,14 @@ export type ErrorResponse<T, U> = {
     code: T;
     message: U;
   };
+  headers: ResponseHeaders;
 };
 
 export const createErrorResponse = <T, U>(params: {
   statusCode: HttpStatusCode;
   errorCode: T;
   errorMessage: U;
+  headers: ResponseHeaders;
 }): ErrorResponse<T, U> => {
   return {
     statusCode: params.statusCode,
@@ -34,6 +58,7 @@ export const createErrorResponse = <T, U>(params: {
       code: params.errorCode,
       message: params.errorMessage,
     },
+    headers: params.headers,
   };
 };
 
@@ -50,4 +75,5 @@ export type ValidationErrorResponse = {
     message: ValidationErrorResponseMessage;
     validationErrors: { key: string; reason: string }[];
   };
+  headers: ResponseHeaders;
 };

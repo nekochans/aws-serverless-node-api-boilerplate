@@ -2,6 +2,8 @@ import { Schema } from 'ajv/lib/types/index';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import {
+  createDefaultResponseHeaders,
+  ResponseHeaders,
   ValidationErrorResponse,
   validationErrorResponseMessage,
 } from './response';
@@ -12,7 +14,11 @@ type ValidateResult = {
   validationErrorResponse?: ValidationErrorResponse;
 };
 
-const validate = <T>(schema: Schema, params: T): ValidateResult => {
+const validate = <T>(
+  schema: Schema,
+  params: T,
+  responseHeaders: ResponseHeaders = createDefaultResponseHeaders(),
+): ValidateResult => {
   const ajv = new Ajv({ allErrors: true });
   addFormats(ajv);
 
@@ -32,6 +38,7 @@ const validate = <T>(schema: Schema, params: T): ValidateResult => {
         message: validationErrorResponseMessage(),
         validationErrors,
       },
+      headers: responseHeaders,
     };
 
     return { isError: true, validationErrorResponse };

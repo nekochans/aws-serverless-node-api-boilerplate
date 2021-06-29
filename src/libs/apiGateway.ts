@@ -5,6 +5,7 @@ import type {
 } from 'aws-lambda';
 import type { FromSchema } from 'json-schema-to-ts';
 import { HttpStatusCode } from '@constants/httpStatusCode';
+import { ResponseHeaders } from '../api/responseHeaders';
 
 type ValidatedAPIGatewayProxyEvent<S, T, U, V> = Omit<
   APIGatewayProxyEventV2,
@@ -20,9 +21,11 @@ export type ValidatedEventAPIGatewayProxyEvent<S, T, U, V> = Handler<
 export const formatJsonResponse = (
   statusCode: HttpStatusCode,
   responseBody: Record<string, unknown>,
-): { statusCode: HttpStatusCode; body: string } => {
+  responseHeaders: ResponseHeaders,
+): { statusCode: HttpStatusCode; body: string; headers: ResponseHeaders } => {
   return {
     statusCode: statusCode,
     body: JSON.stringify(responseBody),
+    headers: responseHeaders,
   };
 };

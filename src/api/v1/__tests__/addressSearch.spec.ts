@@ -13,10 +13,24 @@ import {
   validationErrorResponseMessage,
 } from '../../response';
 import { HttpStatusCode } from '@constants/httpStatusCode';
+import * as response from '../../response';
 
 describe('addressSearch', () => {
+  let responseSpy;
+  const fakeRequestId = 'aaaaaaaa-bbbbbbbbb-123-ddddddddddddd';
+
+  beforeEach(() => {
+    responseSpy = jest
+      .spyOn(response, 'createDefaultResponseHeaders')
+      .mockReturnValue({
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
+      });
+  });
+
   afterEach(() => {
     axiosMock.restore();
+    responseSpy.mockRestore();
   });
 
   it('should return a address', async () => {
@@ -52,6 +66,10 @@ describe('addressSearch', () => {
         region: '東京都',
         locality: '新宿区',
       },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
+      },
     };
 
     const actual = await addressSearch(request, fetchAddressByPostalCode);
@@ -69,6 +87,10 @@ describe('addressSearch', () => {
       body: {
         code: 'notAllowedPostalCode',
         message: 'not allowed to search by that postalCode',
+      },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
       },
     };
 
@@ -98,6 +120,10 @@ describe('addressSearch', () => {
         code: 'notFoundAddress',
         message: 'address is not found',
       },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
+      },
     };
 
     const actual = await addressSearch(request, fetchAddressByPostalCode);
@@ -117,6 +143,10 @@ describe('addressSearch', () => {
         validationErrors: [
           { key: 'postalCode', reason: 'must NOT have more than 7 characters' },
         ],
+      },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
       },
     };
 

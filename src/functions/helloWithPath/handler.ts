@@ -21,7 +21,11 @@ const helloWithPathHandler: ValidatedEventAPIGatewayProxyEvent<
 
   const response = helloWithPath(request);
 
-  return formatJsonResponse(response.statusCode, response.body);
+  return formatJsonResponse(
+    response.statusCode,
+    response.body,
+    response.headers,
+  );
 };
 
 export const main = middyfy(helloWithPathHandler);

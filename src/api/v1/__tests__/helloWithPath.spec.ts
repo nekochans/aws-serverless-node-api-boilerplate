@@ -4,8 +4,25 @@ import helloWithPath, {
 } from '../helloWithPath';
 import { HttpStatusCode } from '@constants/httpStatusCode';
 import { validationErrorResponseMessage } from '../../response';
+import * as response from '../../response';
 
 describe('helloWithPath', () => {
+  let responseSpy;
+  const fakeRequestId = 'aaaaaaaa-bbbbbbbbb-123-ddddddddddddd';
+
+  beforeEach(() => {
+    responseSpy = jest
+      .spyOn(response, 'createDefaultResponseHeaders')
+      .mockReturnValue({
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
+      });
+  });
+
+  afterEach(() => {
+    responseSpy.mockRestore();
+  });
+
   it('should return a success message', () => {
     const request = {
       helloId: 'MokoCat1',
@@ -15,6 +32,10 @@ describe('helloWithPath', () => {
       statusCode: HttpStatusCode.ok,
       body: {
         message: `HelloWithPath ${request.helloId}, welcome to the exciting Serverless world!`,
+      },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
       },
     };
 
@@ -31,6 +52,10 @@ describe('helloWithPath', () => {
       body: {
         code: 'notAllowedHelloId',
         message: 'helloId is not allowed',
+      },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
       },
     };
 
@@ -49,6 +74,10 @@ describe('helloWithPath', () => {
         validationErrors: [
           { key: 'helloId', reason: 'must NOT have more than 8 characters' },
         ],
+      },
+      headers: {
+        'content-type': 'application/json',
+        'x-request-id': fakeRequestId,
       },
     };
 

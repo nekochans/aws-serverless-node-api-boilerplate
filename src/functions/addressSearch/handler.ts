@@ -23,7 +23,11 @@ const addressSearchHandler: ValidatedEventAPIGatewayProxyEvent<
 
   const response = await addressSearch(request, fetchAddressByPostalCode);
 
-  return formatJsonResponse(response.statusCode, response.body);
+  return formatJsonResponse(
+    response.statusCode,
+    response.body,
+    response.headers,
+  );
 };
 
 export const main = middyfy(addressSearchHandler);
