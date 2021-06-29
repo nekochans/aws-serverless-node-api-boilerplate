@@ -19,7 +19,15 @@ const addressSearchHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof pathParams,
   typeof defaultQueryParams
 > = async (event) => {
-  const request = event.pathParameters;
+  const request = Object.prototype.hasOwnProperty.call(
+    event.headers,
+    'x-request-id',
+  )
+    ? {
+        ...event.pathParameters,
+        ...{ 'x-request-id': event.headers['x-request-id'] },
+      }
+    : { ...event.pathParameters };
 
   const response = await addressSearch(request, fetchAddressByPostalCode);
 

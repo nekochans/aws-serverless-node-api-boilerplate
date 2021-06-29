@@ -16,7 +16,12 @@ const helloHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultPathParams,
   typeof defaultQueryParams
 > = async (event) => {
-  const request = event.body;
+  const request = Object.prototype.hasOwnProperty.call(
+    event.headers,
+    'x-request-id',
+  )
+    ? { ...event.body, ...{ 'x-request-id': event.headers['x-request-id'] } }
+    : { ...event.body };
 
   const response = hello(request);
 
