@@ -11,7 +11,8 @@ import defaultQueryParams from '@constants/defaultQueryParams';
 import pathParams from './pathParams';
 
 import { fetchAddressByPostalCode } from '../../api/repositories/implements/axios/address';
-import addressSearch from '../../api/v1/addressSearch';
+import addressSearch, { Request } from '../../api/v1/addressSearch';
+import { createApiRequest } from '../../api/request';
 
 const addressSearchHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultRequestHeader,
@@ -19,15 +20,10 @@ const addressSearchHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof pathParams,
   typeof defaultQueryParams
 > = async (event) => {
-  const request = Object.prototype.hasOwnProperty.call(
+  const request = createApiRequest<Request>(
     event.headers,
-    'x-request-id',
-  )
-    ? {
-        ...event.pathParameters,
-        ...{ 'x-request-id': event.headers['x-request-id'] },
-      }
-    : { ...event.pathParameters };
+    event.pathParameters,
+  );
 
   const response = await addressSearch(request, fetchAddressByPostalCode);
 

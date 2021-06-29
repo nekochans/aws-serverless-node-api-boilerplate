@@ -13,7 +13,7 @@ import { HelloSchema } from '../domain/types/schemas/helloSchema';
 import { DefaultApiRequest } from '../request';
 import { RequestSchema } from '../domain/types/schemas/requestSchema';
 
-type Request = DefaultApiRequest & {
+export type Request = DefaultApiRequest & {
   helloId: string;
 };
 

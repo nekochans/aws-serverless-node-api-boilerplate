@@ -12,7 +12,8 @@ import defaultPathParams from '@constants/defaultPathParams';
 import defaultQueryParams from '@constants/defaultQueryParams';
 
 import requestBody from './requestBody';
-import createUser from '../../api/v1/createUser';
+import createUser, { Request } from '../../api/v1/createUser';
+import { createApiRequest } from '../../api/request';
 
 const prisma = new PrismaClient({ log: ['query', 'info', `warn`, `error`] });
 
@@ -22,12 +23,7 @@ const createUserHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultPathParams,
   typeof defaultQueryParams
 > = async (event) => {
-  const request = Object.prototype.hasOwnProperty.call(
-    event.headers,
-    'x-request-id',
-  )
-    ? { ...event.body, ...{ 'x-request-id': event.headers['x-request-id'] } }
-    : { ...event.body };
+  const request = createApiRequest<Request>(event.headers, event.body);
 
   const response = await createUser(request, prisma);
 

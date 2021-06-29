@@ -9,7 +9,8 @@ import defaultRequestBody from '@constants/defaultRequestBody';
 
 import pathParams from './pathParams';
 import queryParams from './queryParams';
-import helloWithPath from '../../api/v1/helloWithPath';
+import helloWithPath, { Request } from '../../api/v1/helloWithPath';
+import { createApiRequest } from '../../api/request';
 
 const helloWithPathHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultRequestHeader,
@@ -17,15 +18,10 @@ const helloWithPathHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof pathParams,
   typeof queryParams
 > = async (event) => {
-  const request = Object.prototype.hasOwnProperty.call(
+  const request = createApiRequest<Request>(
     event.headers,
-    'x-request-id',
-  )
-    ? {
-        ...event.pathParameters,
-        ...{ 'x-request-id': event.headers['x-request-id'] },
-      }
-    : { ...event.pathParameters };
+    event.pathParameters,
+  );
 
   const response = helloWithPath(request);
 

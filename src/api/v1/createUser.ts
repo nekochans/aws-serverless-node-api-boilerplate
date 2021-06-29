@@ -20,7 +20,7 @@ import assertNever from '../utils/assertNever';
 import { DefaultApiRequest } from '../request';
 import { RequestSchema } from '../domain/types/schemas/requestSchema';
 
-type Request = DefaultApiRequest & {
+export type Request = DefaultApiRequest & {
   email: string;
   phoneNumber?: string;
 };

@@ -8,7 +8,8 @@ import defaultQueryParams from '@constants/defaultQueryParams';
 
 import requestHeader from './requestHeader';
 import requestBody from './requestBody';
-import hello from '../../api/v1/hello';
+import hello, { Request } from '../../api/v1/hello';
+import { createApiRequest } from '../../api/request';
 
 const helloHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof requestHeader,
@@ -16,12 +17,7 @@ const helloHandler: ValidatedEventAPIGatewayProxyEvent<
   typeof defaultPathParams,
   typeof defaultQueryParams
 > = async (event) => {
-  const request = Object.prototype.hasOwnProperty.call(
-    event.headers,
-    'x-request-id',
-  )
-    ? { ...event.body, ...{ 'x-request-id': event.headers['x-request-id'] } }
-    : { ...event.body };
+  const request = createApiRequest<Request>(event.headers, event.body);
 
   const response = hello(request);
 

@@ -19,7 +19,7 @@ import { AddressSchema } from '../domain/types/schemas/addressSchema';
 import { DefaultApiRequest } from '../request';
 import { RequestSchema } from '../domain/types/schemas/requestSchema';
 
-type Request = DefaultApiRequest & {
+export type Request = DefaultApiRequest & {
   postalCode: string;
 };
 
