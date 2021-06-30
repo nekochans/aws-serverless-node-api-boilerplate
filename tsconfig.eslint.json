@@ -1,11 +1,5 @@
 {
   "extends": "./tsconfig.json",
-  "include": [
-    "src/**/*.js",
-    "src/**/*.ts",
-    "serverless.ts",
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*.js", "src/**/*.ts", "serverless.ts"],
+  "exclude": ["node_modules"]
 }

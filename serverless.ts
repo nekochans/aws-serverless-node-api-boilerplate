@@ -1,5 +1,10 @@
 import type { AWS } from '@serverless/typescript';
-import { hello, helloWithPath, addressSearch, createUser } from '@functions/index';
+import {
+  hello,
+  helloWithPath,
+  addressSearch,
+  createUser,
+} from '@functions/index';
 
 const serverlessConfiguration: AWS = {
   service: 'serverless-node-api',
@@ -50,11 +55,11 @@ const serverlessConfiguration: AWS = {
               'ec2:DetachNetworkInterface',
               'ec2:DeleteNetworkInterface',
             ],
-            Resource: '*'
+            Resource: '*',
           },
         ],
-      }
-    }
+      },
+    },
   },
   // import the function via paths
   functions: { hello, helloWithPath, addressSearch, createUser },
