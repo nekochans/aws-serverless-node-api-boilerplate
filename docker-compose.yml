@@ -11,7 +11,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "63306:3306"
+      - '63306:3306'
     volumes:
       - nekochans-serverless-api-mysql:/var/lib/mysql
       - ./docker/mysql:/docker-entrypoint-initdb.d

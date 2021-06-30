@@ -18,4 +18,9 @@ module.exports = {
     'prettier',
   ],
   rules: {},
+  overrides: [
+    {
+      files: ['*.tsx'],
+    },
+  ],
 };
