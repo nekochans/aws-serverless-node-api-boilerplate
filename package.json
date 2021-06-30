@@ -7,10 +7,10 @@
   "scripts": {
     "deploy": "serverless deploy -v",
     "remove": "serverless remove -v",
-    "lint:prettier": "prettier 'src/**/*.{js,ts,json}' --check",
+    "lint:prettier": "prettier --check .",
     "fix:prettier": "npm run lint:prettier -- --write",
-    "lint:eslint": "eslint 'src/**/*.{js,ts}'",
-    "fix:eslint": "eslint --fix 'src/**/*.{js,ts}'",
+    "lint:eslint": "eslint .",
+    "fix:eslint": "npm run lint:eslint -- --fix",
     "lint": "run-s lint:*",
     "format": "run-s fix:*",
     "test": "DATABASE_URL=\"mysql://serverless_test_user:Serverless_Test_User|8888@127.0.0.1:63306/serverless_test\" jest",
