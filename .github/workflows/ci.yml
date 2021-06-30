@@ -32,9 +32,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Package install
       - run: |
           npm ci
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
