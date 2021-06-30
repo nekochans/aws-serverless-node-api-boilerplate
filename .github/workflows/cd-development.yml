@@ -51,6 +51,9 @@ jobs:
           aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile $AWS_PROFILE
 
       - name: Deploy to AWS
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
       - run: |
           npm run prisma:generate
           npm run deploy
