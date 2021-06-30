@@ -25,9 +25,7 @@ nodenv local 14.15.0
 
 `node -v` で目的のバージョンが表示されるようになったら、以下を実行して下さい。
 
-`npm install -g yarn` で `yarn` をインストールします。
-
-`yarn install` で依存 package をインストールします。
+`npm ci` で依存 package をインストールします。
 
 ### 環境変数の設定
 
@@ -69,7 +67,7 @@ Migration のロールバックを行う際は `./migrate_down.sh` を実行し�
 
 ### Prisma Client の生成
 
-`yarn run prisma:generate` を実行します。
+`npm run prisma:generate` を実行します。
 
 ## API を追加する具体的な手順
 
@@ -209,7 +207,7 @@ created ./migrations/20210627224719_add_column_to_users_status.up.sql
 
 ### 3. Prisma Client の再構築
 
-`yarn run prisma:introspect` を実行して `prisma/schema.prisma` に新しいテーブル構造を取り込みます。
+`npm run prisma:introspect` を実行して `prisma/schema.prisma` に新しいテーブル構造を取り込みます。
 
 その後で `prisma:generate` を実行して Prisma Client を再構築します。
 
@@ -236,7 +234,7 @@ AWS の CodeBuild で行っています。
 
 全ての関数に単体テストを実装するのは、テストコードによって開発工数が増大し逆にリファクタリングを阻害する要因になるので、あまりオススメ出来ません。
 
-テストコードの実行は `yarn run test` で行います。
+テストコードの実行は `npm run test` で行います。
 
 ## デプロイについて
 
