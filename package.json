@@ -14,7 +14,7 @@
     "lint": "run-s lint:*",
     "format": "run-s fix:*",
     "test": "DATABASE_URL=\"mysql://serverless_test_user:Serverless_Test_User|8888@127.0.0.1:63306/serverless_test\" jest",
-    "prisma:introspect": "prisma introspect --force",
+    "prisma:introspect": "DATABASE_URL=\"mysql://serverless_test_user:Serverless_Test_User|8888@127.0.0.1:63306/serverless_test\" prisma introspect --force",
     "prisma:generate": "prisma generate"
   },
   "engines": {
